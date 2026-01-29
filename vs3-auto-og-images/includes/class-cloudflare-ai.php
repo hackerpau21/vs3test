@@ -326,20 +326,21 @@ class VS3_Auto_OG_Cloudflare_AI {
      * @return string The X-marks prompt
      */
     private function get_xmarks_prompt() {
-        return 'Create a simple, clean background image with a white or very light background. ' .
-               'Place medium-sized X marks arranged in a regular grid or repeating pattern across the entire image. ' .
-               'Each X mark should be made of two intersecting straight lines forming an X shape. ' .
-               'The X marks should be in different bright, cheerful flat colors: red, blue, green, yellow, orange, pink, and purple. ' .
-               'All X marks should be approximately the same size - medium sized, clearly visible but not too large. ' .
-               'The X marks should be evenly spaced in a consistent pattern like a wallpaper or textile design. ' .
+        return 'Create a clean background image with a pure white background. ' .
+               'Place SMALL X marks arranged in a sparse, evenly-spaced grid pattern across the entire image. ' .
+               'Each X mark should be made of two thin intersecting lines forming a small X shape. ' .
+               'IMPORTANT SIZE: Each X mark should be SMALL - approximately 20-30 pixels in size with THIN 2-3 pixel stroke width. ' .
+               'IMPORTANT SPACING: X marks should be spaced FAR APART - approximately 100-120 pixels between each X mark. ' .
+               'The grid should have slight row offset creating a staggered pattern. ' .
+               'Use these specific flat colors randomly: red (#e74c3c), cyan (#00bcd4), green (#2ecc71), yellow (#f1c40f), gray (#95a5a6), pink (#e91e63). ' .
                'CRITICAL REQUIREMENTS: ' .
-               '1. Background MUST be pure white or very light gray - no colors, no gradients. ' .
-               '2. Use ONLY flat solid colors for the X marks - absolutely NO gradients, NO color blends, NO shadows. ' .
-               '3. Each X mark must have sharp, crisp, clean edges - no blur, no glow, no soft edges. ' .
-               '4. NO flowing shapes, NO organic curves, NO wavy lines, NO abstract art. ' .
-               '5. Think of simple geometric stamps or stickers arranged neatly on white paper. ' .
-               '6. The pattern should look like a cheerful, colorful, minimalist wallpaper design. ' .
-               'FORBIDDEN: gradients, color transitions, flowing colors, organic shapes, abstract swirls, bokeh, blur effects.';
+               '1. Background MUST be pure white - no colors, no gradients. ' .
+               '2. X marks must be SMALL and THIN - like delicate typographic marks, not bold shapes. ' .
+               '3. Use ONLY flat solid colors - absolutely NO gradients, NO shadows, NO glow effects. ' .
+               '4. Each X must have sharp, crisp, clean edges with thin stroke weight. ' .
+               '5. SPARSE distribution - lots of white space between X marks. ' .
+               '6. Think of small, delicate plus signs rotated 45 degrees scattered lightly on white paper. ' .
+               'FORBIDDEN: thick lines, bold marks, large X shapes, gradients, shadows, blur, dense patterns.';
     }
     
     /**
@@ -389,7 +390,7 @@ class VS3_Auto_OG_Cloudflare_AI {
             'minimal' => 'Extremely minimalist design with simple shapes, lots of white space, subtle lines, and restrained color palette. Clean and uncluttered.',
             'vibrant' => 'Bold, energetic design with bright saturated colors, dynamic patterns, and high contrast. Eye-catching and lively composition.',
             'professional' => 'Corporate professional style with subtle patterns, muted colors, clean lines, and sophisticated composition. Business-appropriate aesthetic.',
-            'x-marks' => 'Clean white background with scattered X marks in flat solid colors (light green, pink, yellow, blue, light grey). Each X is a simple geometric shape - two intersecting lines. Consistent sizing, even distribution. NO gradients, NO flowing shapes, NO organic curves. Sharp crisp edges only.',
+            'x-marks' => 'Pure white background with small, thin X marks sparsely scattered in a grid. Each X is 20-30px with 2-3px thin strokes. Colors: red, cyan, green, yellow, gray, pink. Wide spacing (100-120px apart). Delicate, lightweight marks like typographic symbols. NO thick lines, NO bold shapes, NO gradients.',
         );
         
         return isset($styles[$style]) ? $styles[$style] : $styles['abstract'];
