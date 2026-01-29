@@ -33,6 +33,18 @@ get_header();
                         </div>
                     </header>
 
+                    <?php if (has_post_thumbnail()) : ?>
+                        <div class="post-featured-image">
+                            <?php
+                            $featured_alt = get_post_meta(get_post_thumbnail_id(), '_wp_attachment_image_alt', true) ?: get_the_title();
+                            ?>
+                            <img class="featured-image"
+                                 src="<?php echo esc_url(get_the_post_thumbnail_url(null, 'large')); ?>"
+                                 alt="<?php echo esc_attr($featured_alt); ?>"
+                                 loading="eager" />
+                        </div>
+                    <?php endif; ?>
+
                     <div class="entry-content">
                         <?php
                         the_content(sprintf(

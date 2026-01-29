@@ -8,7 +8,7 @@
 
     // Wait for DOM to be ready
     $(document).ready(function() {
-        
+
         // Initialize all functions
         initSmoothScrolling();
         initHeaderScroll();
@@ -19,8 +19,33 @@
         initPerformanceOptimizations();
         initDropdownMenus(); // Add dropdown menu functionality
         initCategoryFilter(); // Add category filter functionality
-        
+        initCodeBlockLineNumbers(); // Add line numbers to code blocks
+
     });
+
+    /**
+     * Add line numbers to code blocks
+     * Creates a terminal-style code display with numbered lines
+     */
+    function initCodeBlockLineNumbers() {
+        document.querySelectorAll('.entry-content pre code').forEach(function(block) {
+            // Skip if already processed
+            if (block.classList.contains('line-numbers-added')) return;
+
+            const lines = block.innerHTML.split('\n');
+            // Only add line numbers if there's more than 1 line
+            if (lines.length > 1) {
+                // Remove empty last line if exists
+                if (lines[lines.length - 1].trim() === '') {
+                    lines.pop();
+                }
+                block.innerHTML = lines.map(function(line, i) {
+                    return '<span class="line-number">' + (i + 1) + '</span>' + line;
+                }).join('\n');
+                block.classList.add('line-numbers-added');
+            }
+        });
+    }
 
     /**
      * Category Filter Functionality

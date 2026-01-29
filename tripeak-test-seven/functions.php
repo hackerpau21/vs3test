@@ -194,8 +194,8 @@ function tripeak_test_seven_scripts() {
     // Enqueue main stylesheet (critical CSS is inlined)
     wp_enqueue_style('tripeak-test-seven-style', get_stylesheet_uri(), array(), $theme_version);
 
-    // Fonts - deferred loading via preload in head
-    wp_enqueue_style('tripeak-test-seven-fonts', 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;500;600&display=swap', array(), null);
+    // Fonts - Domine (serif for headings) and Montserrat (sans-serif for body)
+    wp_enqueue_style('tripeak-test-seven-fonts', 'https://fonts.googleapis.com/css2?family=Domine:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap', array(), null);
 
     // Font Awesome - deferred loading
     wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css', array(), '6.0.0');
@@ -1843,6 +1843,20 @@ function tripeak_test_seven_breadcrumb() {
     // Home link
     $breadcrumb .= '<li class="breadcrumb-item">';
     $breadcrumb .= '<a href="' . esc_url(home_url('/')) . '" class="breadcrumb-link">' . esc_html__('Home', 'tripeak-test-seven') . '</a>';
+    $breadcrumb .= '</li>';
+
+    // Blog link (posts page)
+    $breadcrumb .= '<li class="breadcrumb-separator" aria-hidden="true">/</li>';
+    $posts_page_id = get_option('page_for_posts');
+    if ($posts_page_id) {
+        $blog_url = get_permalink($posts_page_id);
+        $blog_title = get_the_title($posts_page_id);
+    } else {
+        $blog_url = home_url('/');
+        $blog_title = __('Blog', 'tripeak-test-seven');
+    }
+    $breadcrumb .= '<li class="breadcrumb-item">';
+    $breadcrumb .= '<a href="' . esc_url($blog_url) . '" class="breadcrumb-link">' . esc_html($blog_title) . '</a>';
     $breadcrumb .= '</li>';
 
     // Get the primary category
