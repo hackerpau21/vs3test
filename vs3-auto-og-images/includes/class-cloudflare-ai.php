@@ -332,15 +332,18 @@ class VS3_Auto_OG_Cloudflare_AI {
                'IMPORTANT SIZE: Each X mark should be SMALL - approximately 20-30 pixels in size with THIN 2-3 pixel stroke width. ' .
                'IMPORTANT SPACING: X marks should be spaced FAR APART - approximately 100-120 pixels between each X mark. ' .
                'The grid should have slight row offset creating a staggered pattern. ' .
-               'Use these specific flat colors randomly: red (#e74c3c), cyan (#00bcd4), green (#2ecc71), yellow (#f1c40f), gray (#95a5a6), pink (#e91e63). ' .
+               'IMPORTANT COLORS: Each individual X mark must be a DIFFERENT color chosen randomly. ' .
+               'Use this color palette and mix them randomly across all X marks: ' .
+               'bright red, bright cyan/turquoise, bright green, golden yellow, medium gray, hot pink/magenta, bright blue, orange. ' .
+               'NO two adjacent X marks should be the same color. Create a colorful, varied, random mix of colors. ' .
                'CRITICAL REQUIREMENTS: ' .
                '1. Background MUST be pure white - no colors, no gradients. ' .
                '2. X marks must be SMALL and THIN - like delicate typographic marks, not bold shapes. ' .
-               '3. Use ONLY flat solid colors - absolutely NO gradients, NO shadows, NO glow effects. ' .
-               '4. Each X must have sharp, crisp, clean edges with thin stroke weight. ' .
-               '5. SPARSE distribution - lots of white space between X marks. ' .
-               '6. Think of small, delicate plus signs rotated 45 degrees scattered lightly on white paper. ' .
-               'FORBIDDEN: thick lines, bold marks, large X shapes, gradients, shadows, blur, dense patterns.';
+               '3. EACH X mark is a DIFFERENT random color from the palette - variety is key. ' .
+               '4. Use ONLY flat solid colors - absolutely NO gradients, NO shadows, NO glow effects. ' .
+               '5. Each X must have sharp, crisp, clean edges with thin stroke weight. ' .
+               '6. SPARSE distribution - lots of white space between X marks. ' .
+               'FORBIDDEN: thick lines, bold marks, large X shapes, gradients, shadows, blur, dense patterns, monochrome, same-color X marks.';
     }
     
     /**
