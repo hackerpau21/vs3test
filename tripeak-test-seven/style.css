@@ -1,0 +1,3466 @@
+@import url('https://fonts.googleapis.com/css?family=Domine:400,700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700&display=swap');
+
+/*
+Theme Name: Theme 7 - Timeless Blog Style
+Description: A timeless, professional WordPress theme with elegant design inspired by Maria Orozova. Features clean layouts, custom Gutenberg blocks, and mobile-first responsive design.
+Author: Pau Inocencio
+Version: 1.0.0
+Text Domain: tripeak-test-seven
+Requires at least: 6.0
+Tested up to: 6.4
+Requires PHP: 7.4
+License: GPL v2 or later
+*/
+
+/* ==========================================================================
+   CSS Custom Properties (Variables)
+   ========================================================================== */
+
+:root {
+    /* Colors - These will be overridden by customizer settings */
+    --primary-color: #E74C3C;
+    --primary-hover: #C0392B;
+    --secondary-color: #3498DB;
+    --secondary-hover: #2980B9;
+    --heading-color: #2D2D2D;
+    --body-text-color: #2D2D2D;
+    --text-dark: #2D2D2D;
+    --text-light: #666;
+    --text-white: #fff;
+    --bg-light: #F8F9FA;
+    --bg-white: #ffffff;
+    --border-color: #E5E5E5;
+    --footer-bg: #2D2D2D;
+    
+    /* Button System Colors */
+    --button-primary-bg: linear-gradient(135deg, var(--primary-color) 0%, #d63031 100%);
+    --button-primary-hover-bg: linear-gradient(135deg, var(--primary-hover) 0%, #c0392b 100%);
+    --button-secondary-bg: linear-gradient(135deg, var(--secondary-color) 0%, #2980b9 100%);
+    --button-secondary-hover-bg: linear-gradient(135deg, var(--secondary-hover) 0%, #21618c 100%);
+    --button-shadow: 0 4px 12px rgba(231, 76, 60, 0.25);
+    --button-shadow-hover: 0 8px 25px rgba(231, 76, 60, 0.35);
+    --button-border-radius: 8px;
+    --button-border-radius-large: 10px;
+    --button-border-radius-small: 6px;
+    
+    /* Typography */
+    --font-serif: 'Domine', serif;
+    --font-sans: 'Montserrat', sans-serif;
+    
+    /* Spacing */
+    --container-max-width: 1200px;
+    --header-height: 110px;
+    --mobile-header-height: 100px;
+    
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   Reset & Base Styles
+   ========================================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-serif);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-dark);
+    background-color: var(--bg-white);
+    margin: 0;
+    padding: 0;
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1.1rem; }
+
+p {
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: underline;
+    transition: color var(--transition-normal);
+}
+
+a:hover {
+    color: var(--primary-hover);
+}
+
+a:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Layout & Grid System
+   ========================================================================== */
+
+.container {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.grid {
+    display: grid;
+    gap: 2rem;
+}
+
+.grid-3 {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    margin-bottom: 3rem;
+}
+
+.grid.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+@media (max-width: 700px) {
+  .grid.grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   Header Styles
+   ========================================================================== */
+
+.site-header {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    min-height: var(--header-height);
+    background: var(--bg-white);
+    box-shadow: none;
+    border-bottom: 1px solid rgba(45, 45, 45, 0.1);
+    margin-top: 0;
+    padding-top: 0;
+    z-index: 1000;
+    position: relative;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2.25rem 0;
+    min-height: var(--header-height);
+}
+
+/* Desktop navigation positioning - center it */
+@media (min-width: 769px) {
+    .header-content {
+        position: relative;
+    }
+    
+    .main-navigation {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+    
+    /* Social links should be on the right */
+    .social-links {
+        margin-left: auto;
+    }
+}
+
+.site-branding {
+    display: flex;
+    align-items: center;
+}
+
+/* Logo Styles */
+.site-logo {
+    display: flex;
+    align-items: center;
+}
+
+.site-logo .custom-logo-link {
+    display: inline-block;
+    line-height: 0;
+}
+
+.site-logo img,
+.custom-logo {
+    height: auto;
+    max-height: 90px;
+    width: auto;
+    max-width: 350px;
+    display: block;
+}
+
+/* Site Title Styles (when no logo) */
+.site-title a {
+    color: var(--text-dark);
+    text-decoration: none;
+    font-size: 1.4rem;
+    font-weight: 600;
+    transition: color var(--transition-normal);
+    text-transform: uppercase;
+    line-height: 1.2;
+    display: block;
+}
+
+.site-title a:hover {
+    color: var(--primary-color);
+}
+
+.site-description {
+    display: none; /* Hide site description as requested */
+}
+
+.main-navigation ul {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    align-items: center;
+}
+
+.main-navigation a {
+    color: var(--text-dark);
+    font-weight: 500;
+    transition: color var(--transition-normal);
+}
+
+.main-navigation a:hover {
+    color: var(--primary-color);
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.social-links a {
+    font-size: 1.2rem;
+    color: var(--text-dark);
+    transition: color var(--transition-normal);
+}
+
+.social-links a:hover {
+    color: var(--primary-color);
+}
+
+
+
+/* ==========================================================================
+   Hero Section
+   ========================================================================== */
+
+/* Hero Section: Centered Bottom Content */
+.hero-section {
+    height: 100vh;
+    min-height: 600px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    margin-top: -130px;
+    padding-top: 130px;
+}
+
+/* Hero position variants */
+.hero-section.hero-position-bottom-center {
+    align-items: flex-end;
+}
+
+.hero-section.hero-position-center-center {
+    align-items: center;
+}
+
+.hero-section.hero-position-center-center .hero-content {
+    margin-bottom: 0;
+}
+
+/* Hero background image - optimized for LCP */
+.hero-bg-image,
+.hero-bg-picture {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+}
+
+.hero-bg-picture {
+    display: block;
+}
+
+/* Optimize picture element display */
+picture {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+picture img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* Card image wrapper optimization */
+.card-image-wrapper picture,
+.post-thumbnail picture,
+.page-featured-image picture {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.card-image-wrapper picture img,
+.post-thumbnail picture img,
+.page-featured-image picture img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(45, 45, 45, 0.4);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+    max-width: var(--container-max-width);
+    padding: 2rem;
+    margin-bottom: 4rem;
+}
+
+.hero-content h1 {
+    color: white;
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* ==========================================================================
+   Featured Stories Section (Magazine Style)
+   ========================================================================== */
+
+.image-card-grid {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  background: var(--bg-light);
+  z-index: 1;
+}
+.image-card-grid > .container {
+  position: relative;
+  z-index: 2;
+}
+
+.image-card-grid .grid-3 {
+    gap: 1.5rem;
+}
+
+/* Featured Story Cards - Magazine Style */
+.image-card-grid .card {
+    background: var(--bg-white);
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: none;
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-normal);
+    position: relative;
+}
+
+.image-card-grid .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    border-color: #D0D0D0;
+}
+
+.image-card-grid .card-image-wrapper {
+    aspect-ratio: 4 / 3;
+    background-color: #f0f0f0;
+    overflow: hidden;
+    position: relative;
+}
+
+.image-card-grid .card-image-placeholder {
+    aspect-ratio: 4 / 3;
+}
+
+.image-card-grid .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform var(--transition-normal);
+    display: block;
+    background-color: #f0f0f0;
+}
+
+.image-card-grid .card:hover .card-image {
+    transform: scale(1.02);
+}
+
+.image-card-grid .card-content {
+    padding: 2rem 1.5rem;
+    position: relative;
+}
+
+.image-card-grid .card-category {
+    display: none;
+}
+
+/* Hide categories on blog page cards to match featured posts style */
+.blog .image-card-grid .card-category,
+.home .image-card-grid .card-category {
+    display: none;
+}
+
+.image-card-grid .card h3 {
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+    font-size: 1.25rem;
+    line-height: 1.4;
+    font-weight: 600;
+}
+
+.image-card-grid .card h3 a {
+    color: var(--text-dark);
+    text-decoration: underline;
+    transition: color var(--transition-normal);
+}
+
+.image-card-grid .card h3 a:hover {
+    color: var(--primary-color);
+}
+
+.image-card-grid .card p {
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.image-card-grid .btn {
+    display: inline-block;
+    background: var(--button-primary-bg);
+    color: var(--text-white);
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--button-border-radius);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all var(--transition-normal);
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: var(--button-shadow);
+}
+
+.image-card-grid .btn:hover {
+    background: var(--button-primary-hover-bg);
+    color: var(--text-white);
+    transform: translateY(-2px);
+    box-shadow: var(--button-shadow-hover);
+}
+
+/* ==========================================================================
+   Category Filter Buttons
+   ========================================================================== */
+
+.category-filter-wrapper {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.category-filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.category-filter-btn {
+    padding: 0.625rem 1.25rem;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+    border: 1px solid #E5E5E5;
+    border-radius: 6px;
+    background: #F5F5F5;
+    color: #666;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    white-space: nowrap;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.category-filter-btn:focus {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 2px;
+}
+
+.category-filter-btn:hover {
+    background: #E8E8E8;
+    border-color: #D0D0D0;
+    color: #333;
+}
+
+.category-filter-btn.active {
+    background: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: var(--text-white);
+    font-weight: 600;
+}
+
+.category-filter-btn.active:hover {
+    background: var(--secondary-hover);
+    border-color: var(--secondary-hover);
+    color: var(--text-white);
+}
+
+/* Responsive adjustments for category filter buttons */
+@media (max-width: 768px) {
+    .category-filter-buttons {
+        gap: 0.5rem;
+    }
+    
+    .category-filter-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* ==========================================================================
+   Generic Card Styles (for Gutenberg Block and other uses)
+   ========================================================================== */
+
+.card {
+    background: var(--bg-white);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 1.5rem;
+}
+
+.card-category {
+    display: inline-block;
+    background: var(--secondary-color);
+    color: var(--text-white);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.card h3 {
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+}
+
+.card p {
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.btn {
+    display: inline-block;
+    background: var(--primary-color);
+    color: var(--text-white);
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: background var(--transition-normal);
+    border: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: var(--primary-hover);
+    color: var(--text-white);
+}
+
+.btn:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Footer Styles
+   ========================================================================== */
+
+.site-footer {
+    background: var(--footer-bg);
+    color: var(--text-white);
+    padding: 3rem 0 1rem;
+}
+
+.site-footer .container {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ccc;
+}
+
+/* ==========================================================================
+   Blog Styles
+   ========================================================================== */
+
+.blog-post {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.post-meta {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.post-content {
+    line-height: 1.8;
+}
+
+.post-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin: 1.5rem 0;
+}
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    
+    .main-navigation {
+        display: block;
+    }
+    
+    /* Hide desktop menu items on mobile */
+    .main-navigation ul {
+        display: none;
+    }
+    
+    .header-content {
+        padding: 1.75rem 0;
+        min-height: var(--mobile-header-height);
+    }
+    
+    .site-header {
+        min-height: var(--mobile-header-height);
+    }
+    
+    .site-main {
+        padding-top: 0;
+    }
+    
+    .front-page .site-main {
+        padding-top: 0;
+    }
+    
+    .blog .site-main,
+    .archive .site-main,
+    .search .site-main,
+    .single .site-main,
+    .page:not(.front-page) .site-main {
+        padding-top: 30px;
+    }
+    
+    .mobile-navigation {
+        top: var(--mobile-header-height);
+        max-height: calc(100vh - var(--mobile-header-height));
+    }
+    
+    .hero-section {
+        height: 100vh;
+        margin-top: -120px;
+        padding-top: 120px;
+        align-items: flex-end;
+    }
+    
+    .hero-content {
+        margin-bottom: 2rem;
+    }
+    
+    .site-title a {
+        font-size: 1.2rem;
+    }
+    
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+    
+    .hero-content p {
+        font-size: 1rem;
+    }
+    
+    .grid-3 {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Featured Stories Mobile Adjustments */
+    .image-card-grid .card-image {
+        height: 100%;
+    }
+    
+    .image-card-grid .card-content {
+        padding: 1.5rem 1rem;
+    }
+    
+    .image-card-grid .card h3 {
+        font-size: 1.1rem;
+    }
+    
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.75rem; }
+    h3 { font-size: 1.5rem; }
+}
+
+/* ==========================================================================
+   Search Form Styles
+   ========================================================================== */
+
+.search-form {
+    position: relative;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.search-input-container {
+    position: relative;
+    display: flex;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-field {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border-color);
+    border-right: none;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color var(--transition-normal);
+}
+
+.search-field:focus {
+    border-color: var(--primary-color);
+}
+
+.search-submit {
+    background: var(--primary-color);
+    color: var(--text-white);
+    border: 2px solid var(--primary-color);
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    transition: background var(--transition-normal);
+    border-left: none;
+}
+
+.search-submit:hover {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.search-submit-text {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .search-submit-text {
+        display: inline;
+        margin-left: 0.5rem;
+    }
+}
+
+.screen-reader-text {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ==========================================================================
+   Mobile Menu Styles (copied from tripeak-test-five)
+   ========================================================================== */
+
+/* Desktop Navigation Styles */
+.main-navigation {
+    display: flex;
+    align-items: center;
+}
+
+.main-navigation ul {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.main-navigation li {
+    position: relative; /* Ensure dropdown positions relative to parent item */
+}
+
+.main-navigation a {
+    color: var(--text-dark);
+    font-weight: 500;
+    text-decoration: none;
+    transition: color var(--transition-normal);
+    padding: 0.5rem 0;
+}
+
+.main-navigation a:hover {
+    color: var(--primary-color);
+}
+
+/* ==========================================================================
+   Dropdown Menu Styles
+   ========================================================================== */
+
+/* Dropdown/submenu positioning */
+.main-navigation ul ul {
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 220px;
+    background: white;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    padding: 0.5rem 0;
+    margin-top: 0.5rem;
+    z-index: 1000;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    transition-delay: 0.15s;
+    list-style: none;
+    gap: 0;
+    contain: layout;
+    will-change: transform, opacity;
+}
+
+.main-navigation ul ul li {
+    width: 100%;
+    margin: 0;
+}
+
+.main-navigation ul ul a {
+    padding: 0.75rem 1.25rem;
+    font-size: 14px;
+    display: block;
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 500;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.main-navigation ul ul a:hover {
+    background-color: #F8F9FA;
+    color: var(--primary-color);
+}
+
+/* Show dropdown on hover - Desktop */
+.main-navigation li:hover > ul,
+.main-navigation li:focus-within > ul {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+    transition-delay: 0s;
+}
+
+/* Dropdown indicator (arrow) */
+.main-navigation .menu-item-has-children > a::after {
+    content: " ▼";
+    font-size: 0.6rem;
+    margin-left: 0.25rem;
+    opacity: 0.6;
+}
+
+/* Third level submenus (if needed) */
+.main-navigation ul ul ul {
+    top: 0;
+    left: 100%;
+    margin: 0 0 0 0.5rem;
+    transform: translateX(-10px);
+    will-change: transform;
+}
+
+.main-navigation li:hover > ul ul ul,
+.main-navigation li:focus-within > ul ul ul {
+    transform: translateX(0);
+}
+
+/* ==========================================================================
+   Mobile Menu Toggle Styles
+   ========================================================================== */
+
+/* Hide menu toggle on desktop */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-dark);
+    padding: 0.5rem;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-menu-checkbox {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-toggle .sr-only {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.menu-toggle .menu-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+/* Prevent body scroll when mobile menu is open */
+body.menu-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+}
+
+/* Mobile Navigation Styles */
+@media (max-width: 768px) {
+    /* Header layout adjustments for mobile */
+    .header-content {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+        position: relative;
+    }
+    
+    /* Site branding adjustments */
+    .site-branding {
+        margin-bottom: 0;
+        flex: 0 0 auto;
+        order: 1;
+    }
+    
+    .site-title a {
+        font-size: 1.2rem;
+    }
+    
+    /* Mobile logo sizing */
+    .site-logo img,
+    .custom-logo {
+        max-height: 60px;
+        max-width: 280px;
+    }
+    
+    /* Main navigation styling for mobile - position on right */
+    .main-navigation {
+        position: static;
+        width: auto;
+        margin: 0;
+        margin-left: auto;
+        padding: 0;
+        border: none;
+        background: transparent;
+        display: flex;
+        align-items: center;
+        order: 2;
+        transform: none;
+    }
+    
+    /* Social links positioning */
+    .social-links {
+        display: none; /* Hide social links on mobile */
+    }
+    
+    /* Show menu toggle on mobile */
+    .menu-toggle {
+        display: block;
+        z-index: 10001;
+        cursor: pointer;
+        position: relative;
+        pointer-events: auto;
+    }
+    
+    /* Front page menu toggle should be white */
+    .front-page .menu-toggle {
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Hide desktop navigation on mobile by default */
+    .main-navigation .primary-menu {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+    }
+    
+    /* Show menu when checkbox is checked */
+    .mobile-menu-checkbox:checked ~ .primary-menu {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: fixed !important;
+        top: 80px !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 10000 !important;
+        flex-direction: column !important;
+        background: white !important;
+        padding: 1rem 0 !important;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+        max-height: calc(100vh - 80px) !important;
+        overflow-y: auto !important;
+        animation: slideDown 0.3s ease-out;
+        margin: 0 !important;
+        gap: 0 !important;
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Front page mobile menu should have white background */
+    .front-page .mobile-menu-checkbox:checked ~ .primary-menu {
+        background: white !important;
+    }
+    
+    .mobile-menu-checkbox:checked ~ .primary-menu > li {
+        width: 100%;
+        text-align: left;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        display: block !important;
+        position: relative !important;
+    }
+    
+    .mobile-menu-checkbox:checked ~ .primary-menu > li:last-child {
+        border-bottom: none;
+    }
+    
+    .mobile-menu-checkbox:checked ~ .primary-menu > li > a {
+        display: block !important;
+        padding: 1rem 1.5rem !important;
+        color: #333333 !important;
+        text-decoration: none !important;
+        font-weight: 500 !important;
+        font-size: 1rem !important;
+        transition: all 0.3s ease;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
+        text-shadow: none !important;
+        background: transparent !important;
+    }
+    
+    .mobile-menu-checkbox:checked ~ .primary-menu > li > a:hover {
+        background-color: #F8F9FA !important;
+        color: #E74C3C !important;
+    }
+    
+    /* Update aria-expanded when checked */
+    .mobile-menu-checkbox:checked ~ .menu-toggle {
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 5px;
+    }
+    
+    .front-page .mobile-menu-checkbox:checked ~ .menu-toggle {
+        background: rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Add top margin to single post and page layouts on mobile */
+    .single-post-layout,
+    .page-layout {
+        margin-top: 35px;
+    }
+    
+    /* ===== Mobile Dropdown Styles (inside hamburger menu) ===== */
+    
+    /* Mobile: Make parent menu items with children tappable */
+    .mobile-menu-checkbox:checked ~ .primary-menu .menu-item-has-children > a {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    /* Mobile: Larger, more visible dropdown indicator */
+    .mobile-menu-checkbox:checked ~ .primary-menu .menu-item-has-children > a::after {
+        content: "▼";
+        font-size: 0.7rem;
+        margin-left: 0.5rem;
+        opacity: 0.7;
+        transition: transform 0.3s ease;
+    }
+    
+    /* Mobile dropdown styles */
+    .mobile-menu-checkbox:checked ~ .primary-menu ul ul {
+        position: static !important;
+        display: flex !important;
+        flex-direction: column !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        background: rgba(248, 249, 250, 0.95) !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        max-height: 0 !important;
+        overflow: hidden !important;
+        transform: translateY(0) !important;
+        transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    
+    .mobile-menu-checkbox:checked ~ .primary-menu ul ul li {
+        border-bottom: 1px solid rgba(229, 229, 229, 0.5);
+    }
+    
+    .mobile-menu-checkbox:checked ~ .primary-menu ul ul li:last-child {
+        border-bottom: none;
+    }
+    
+    .mobile-menu-checkbox:checked ~ .primary-menu ul ul a {
+        padding: 0.75rem 2rem !important;
+        font-size: 0.9rem !important;
+    }
+    
+    /* Show submenu on mobile when toggled with JavaScript */
+    .mobile-menu-checkbox:checked ~ .primary-menu li.submenu-open > ul {
+        max-height: 1000px !important;
+        padding: 0.5rem 0 !important;
+    }
+    
+    /* Rotate arrow indicator when open */
+    .mobile-menu-checkbox:checked ~ .primary-menu li.submenu-open > a::after {
+        transform: rotate(180deg);
+    }
+    
+    /* Also support focus-within as fallback */
+    .mobile-menu-checkbox:checked ~ .primary-menu li:focus-within > ul {
+        max-height: 1000px !important;
+        padding: 0.5rem 0 !important;
+    }
+    
+    .mobile-menu-checkbox:checked ~ .primary-menu li:focus-within > a::after {
+        transform: rotate(180deg);
+    }
+    
+    /* Third level submenus on mobile */
+    .mobile-menu-checkbox:checked ~ .primary-menu ul ul ul {
+        left: 0;
+        margin: 0;
+    }
+    
+    .mobile-menu-checkbox:checked ~ .primary-menu ul ul ul a {
+        padding-left: 3rem !important;
+    }
+}
+
+/* Mobile navigation is now always visible, no animations needed */
+
+
+
+/* ==========================================================================
+   Enhanced Card Styles
+   ========================================================================== */
+
+.card-image-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-image-wrapper a {
+    display: block;
+}
+
+.card-meta {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+.card-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.card-meta i {
+    font-size: 0.8rem;
+}
+
+.card-footer {
+    margin-top: auto;
+    color: var(--secondary-color);
+}
+
+.card-category a {
+    color: var(--text-white);
+    text-decoration: underline;
+}
+
+.card-category a:hover {
+    color: var(--text-white);
+    opacity: 0.9;
+}
+
+.card-footer .btn {
+  color: var(--secondary-color);
+  border-color: var(--secondary-color);
+  background: transparent;
+}
+.card-footer .btn:hover {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  background: transparent;
+}
+
+/* ==========================================================================
+   Single Post Styles
+   ========================================================================== */
+
+.single-post {
+    margin-bottom: 3rem;
+}
+
+.post-featured-image {
+    margin-bottom: 2rem;
+}
+
+.featured-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.post-categories {
+    margin-bottom: 1rem;
+}
+
+.post-category {
+    display: inline-block;
+    background: var(--secondary-color);
+    color: var(--text-white);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: none;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.post-category:hover {
+    background: var(--secondary-hover);
+    color: var(--text-white);
+}
+
+.entry-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.entry-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.entry-meta a {
+    color: var(--text-light);
+}
+
+.entry-meta a:hover {
+    color: var(--primary-color);
+}
+
+.post-tags {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: var(--bg-light);
+    border-radius: 8px;
+}
+
+.tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.tag-link {
+    display: inline-block;
+    background: var(--bg-white);
+    color: var(--text-light);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-normal);
+}
+
+.tag-link:hover {
+    background: var(--primary-color);
+    color: var(--text-white);
+    border-color: var(--primary-color);
+}
+
+/* ==========================================================================
+   Author Bio Styles
+   ========================================================================== */
+
+.author-bio {
+    display: flex;
+    gap: 1.5rem;
+    padding: 2rem;
+    background: var(--bg-light);
+    border-radius: 8px;
+    margin: 3rem 0;
+}
+
+.author-avatar img {
+    border-radius: 50%;
+}
+
+.author-info h3 {
+    margin-bottom: 0.5rem;
+}
+
+.author-info h3 a {
+    color: var(--text-dark);
+    text-decoration: none;
+}
+
+.author-info h3 a:hover {
+    color: var(--primary-color);
+}
+
+.author-description {
+    margin-bottom: 1rem;
+    color: var(--text-light);
+}
+
+.author-link {
+    color: var(--primary-color);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.author-link:hover {
+    color: var(--primary-hover);
+}
+
+/* ==========================================================================
+   Related Posts Styles
+   ========================================================================== */
+
+.related-posts {
+    margin: 3rem 0;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border-color);
+}
+
+.related-posts h3 {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* Ensure related post card images are 4:3 */
+.related-posts .card-image-wrapper {
+    aspect-ratio: 4 / 3;
+}
+
+.related-posts .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+
+.related-posts .card-image-placeholder {
+    aspect-ratio: 4 / 3;
+    height: auto !important;
+}
+
+/* ==========================================================================
+   404 Error Page Styles
+   ========================================================================== */
+
+.error-404-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.error-number {
+    font-size: 8rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+}
+
+.search-form-container {
+    margin: 2rem 0;
+}
+
+.recent-posts-section,
+.categories-section,
+.navigation-links {
+    margin: 3rem 0;
+}
+
+.categories-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.categories-list li {
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: all var(--transition-normal);
+}
+
+.categories-list li:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.categories-list a {
+    display: block;
+    padding: 1rem;
+    text-decoration: none;
+    color: var(--text-dark);
+}
+
+.categories-list a:hover {
+    color: var(--primary-color);
+}
+
+.post-count {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   Header Scroll Effects
+   ========================================================================== */
+
+.site-header.scrolled {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.site-header.header-hidden {
+    transform: translateY(-100%);
+}
+
+/* ==========================================================================
+   Page Layout Adjustments
+   ========================================================================== */
+
+.site-main {
+    padding-top: 0; /* Removed top padding */
+    min-height: calc(100vh - 130px);
+}
+
+/* Add top padding to the main content container within site main */
+.site-main > .container {
+    padding-top: 10px;
+}
+
+/* Remove top padding on front page with hero section */
+.front-page .site-main {
+    padding-top: 0;
+}
+
+/* ==========================================================================
+   Performance Optimizations
+   ========================================================================== */
+
+/* Lazy loading styles */
+img.lazy {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+img.lazy.loaded,
+img.lazy[data-src] {
+    opacity: 1;
+}
+
+/* Hero background loading transition */
+.hero-section.has-lazy-bg {
+    transition: background-image 0.5s ease-in-out;
+}
+
+/* Optimize image rendering */
+img {
+    /* Better image quality */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    
+    /* Prevent layout shift */
+    height: auto;
+    max-width: 100%;
+}
+
+/* Card image optimizations */
+.card-image {
+    display: block;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.card-image.lazy {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+/* Prevent cumulative layout shift */
+.card-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    aspect-ratio: 4/3;
+}
+
+/* Loading placeholder animation */
+.lazy:not(.loaded) {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Reduce paint complexity for better performance */
+.hero-section {
+    will-change: background-image;
+    transform: translateZ(0); /* Force hardware acceleration */
+}
+
+.card {
+    will-change: auto;
+}
+
+.card:hover {
+    will-change: transform;
+}
+
+/* Optimize scroll performance */
+.site-main {
+    contain: layout style paint;
+}
+
+/* Responsive image container optimization */
+.hero-section,
+.card-image-wrapper {
+    contain: layout style paint;
+}
+
+/* Make header transparent on front page */
+.front-page .site-header {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1000 !important;
+}
+
+/* Make header text white on front page for better visibility */
+.front-page .site-title a {
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.front-page .site-title a:hover {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Logo visibility on front page - add drop shadow for better visibility */
+.front-page .site-logo img,
+.front-page .custom-logo {
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.front-page .main-navigation a {
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.front-page .main-navigation a:hover {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Dropdown text should be black on front page (white background) */
+.front-page .main-navigation ul ul a {
+    color: var(--text-dark) !important;
+    text-shadow: none !important;
+}
+
+.front-page .main-navigation ul ul a:hover {
+    color: var(--primary-color) !important;
+    background-color: #F8F9FA;
+}
+
+.front-page .social-links a {
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.front-page .social-links a:hover {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.front-page .mobile-menu-toggle {
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Ensure blog page and other pages maintain proper padding */
+.blog .site-main,
+.archive .site-main,
+.search .site-main,
+.single .site-main,
+.page:not(.front-page) .site-main {
+    padding-top: 0;
+}
+
+.single-post-layout,
+.page-layout {
+    max-width: var(--container-max-width);
+    padding: 0;
+}
+
+/* Top padding for single post and page layouts */
+.single-post-layout,
+.page-layout {
+    padding-top: 20px;
+}
+
+/* Legacy blog post item styles - now using card grid layout */
+.blog-post-item {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.blog-post-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+/* Blog, Archive, and Search pages using magazine-style card grid layout */
+.blog .image-card-grid,
+.home .image-card-grid,
+.archive .image-card-grid,
+.search .image-card-grid {
+    padding: 4rem 0;
+    background: var(--bg-light);
+}
+
+/* Hide categories on all listing pages to match featured posts style */
+.archive .image-card-grid .card-category,
+.search .image-card-grid .card-category {
+    display: none;
+}
+
+/* ==========================================================================
+   Pagination Styles
+   ========================================================================== */
+
+.pagination {
+    margin: 3rem 0;
+    text-align: center;
+}
+
+.page-numbers {
+    display: inline-flex;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+}
+
+.page-numbers a,
+.page-numbers span {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: var(--text-light);
+    text-decoration: none;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    transition: all var(--transition-normal);
+}
+
+.page-numbers a:hover,
+.page-numbers .current {
+    background: var(--primary-color);
+    color: var(--text-white);
+    border-color: var(--primary-color);
+}
+
+/* ==========================================================================
+   Enhanced Mobile Styles
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .author-bio {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem;
+    }
+    
+    .entry-meta {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .error-number {
+        font-size: 4rem;
+    }
+    
+    .nav-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .nav-buttons .btn {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+         .single-post-layout,
+     .page-layout {
+         padding: 1rem;
+         padding-top: 20px;
+     }
+    
+    .categories-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+    .site-header,
+    .site-footer,
+    .mobile-navigation,
+    .social-links,
+    .search-form-container,
+    .author-bio,
+    .related-posts {
+        display: none;
+    }
+    
+    .site-main {
+        padding-top: 0;
+    }
+    
+    body {
+        font-size: 12pt;
+        line-height: 1.4;
+    }
+}
+
+/* ==========================================================================
+   Custom Gutenberg Block Styles
+   ========================================================================== */
+
+/* Card Grid Block Editor Styles */
+.tripeak-card-grid-editor {
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    background: #f9f9f9;
+}
+
+.editor-card-grid .editor-card {
+    background: white;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    padding: 15px;
+    position: relative;
+}
+
+.editor-card-grid .editor-card:hover {
+    border-color: #007cba;
+    box-shadow: 0 2px 8px rgba(0, 124, 186, 0.15);
+}
+
+/* Custom Card Grid Frontend Styles */
+.custom-card-grid {
+    margin: 2rem 0;
+}
+
+.custom-card-grid .grid {
+    display: grid;
+    gap: 2rem;
+}
+
+.custom-card-grid .grid-3 {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+@media (max-width: 768px) {
+    .custom-card-grid .grid-3 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Custom Card Grid: black only, with hover color */
+.custom-card-grid .card {
+  background: #111;
+  color: var(--text-white);
+  border: 1.5px solid #111;
+  border-radius: 8px;
+  box-shadow: none;
+  transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+.custom-card-grid .card h3,
+.custom-card-grid .card-title,
+.custom-card-grid .card h3 a {
+  color: var(--text-white);
+}
+.custom-card-grid .card h3 a:hover,
+.custom-card-grid .card-title a:hover {
+  color: var(--primary-color);
+}
+.custom-card-grid .card .btn {
+  background: var(--secondary-color);
+  color: var(--text-white);
+  border: none;
+}
+.custom-card-grid .card .btn:hover {
+  background: var(--secondary-color);
+  color: var(--text-white);
+  border: none;
+}
+.custom-card-grid .card:hover {
+  background: var(--primary-color);
+  color: var(--text-white);
+  border-color: var(--primary-color);
+}
+.custom-card-grid .card:hover h3,
+.custom-card-grid .card:hover .card-title,
+.custom-card-grid .card:hover h3 a {
+  color: var(--text-white);
+}
+
+/* ==========================================================================
+   Utility Classes
+   ========================================================================== */
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+
+.hidden { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; } 
+
+/* Hide page titles on all pages except the blog page (posts page) */
+.page:not(.blog):not(.home):not(.front-page) h1.page-title,
+.page:not(.blog):not(.home):not(.front-page) h1.entry-title,
+.front-page h1.page-title,
+.front-page h1.entry-title {
+    display: none;
+} 
+
+/* Remove padding from page content section */
+.page-content {
+    padding: 0 !important;
+} 
+
+/* Indented and readable lists in content */
+.entry-content ul,
+.entry-content ol {
+  margin-left: 2rem;
+  margin-bottom: 1.5rem;
+}
+.entry-content ul ul,
+.entry-content ol ol,
+.entry-content ul ol,
+.entry-content ol ul {
+  margin-left: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.entry-content li {
+  margin-bottom: 0.4em;
+}
+
+/* Visually appealing blockquote styles */
+.entry-content blockquote {
+  position: relative;
+  margin: 2.5rem 0;
+  padding: 1.5rem 2.5rem 1.5rem 2.5rem;
+  background: linear-gradient(90deg, var(--bg-light) 80%, #eaf6fb 100%);
+  border-left: 6px solid var(--primary-color);
+  border-image: linear-gradient(180deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  border-image-slice: 1;
+  border-radius: 0 1.5rem 1.5rem 0;
+  font-style: italic;
+  color: var(--text-dark);
+  font-size: 1.18rem;
+  box-shadow: 0 2px 16px rgba(52,152,219,0.06);
+}
+.entry-content blockquote:before {
+  content: '\201C';
+  position: absolute;
+  left: 1.1rem;
+  top: 0.7rem;
+  font-size: 3.5rem;
+  color: var(--primary-color);
+  opacity: 0.18;
+  font-family: serif;
+  line-height: 1;
+  pointer-events: none;
+}
+.entry-content blockquote p {
+  margin: 0;
+  font-style: inherit;
+}
+.entry-content blockquote cite {
+  display: block;
+  margin-top: 1.2rem;
+  font-size: 1rem;
+  color: #888;
+  font-style: normal;
+  text-align: right;
+}
+@media (max-width: 600px) {
+  .entry-content blockquote {
+    padding: 1.1rem 1.2rem 1.1rem 1.5rem;
+    font-size: 1.05rem;
+  }
+  .entry-content blockquote:before {
+    left: 0.5rem;
+    top: 0.3rem;
+    font-size: 2.2rem;
+  }
+}
+
+/* Visually appealing inline code and code block styles */
+.entry-content code {
+  font-family: 'Fira Mono', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', monospace;
+  background: #f4f4f7;
+  color: var(--primary-color);
+  padding: 0.18em 0.45em;
+  border-radius: 4px;
+  font-size: 0.98em;
+  border: 1px solid #ececec;
+  box-shadow: 0 1px 2px rgba(52,152,219,0.04);
+  word-break: break-word;
+}
+.entry-content pre {
+  background: linear-gradient(90deg, var(--bg-light) 80%, #eaf6fb 100%);
+  color: #222;
+  font-family: 'Fira Mono', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', monospace;
+  font-size: 1.01em;
+  border-radius: 8px;
+  border: 1.5px solid var(--border-color);
+  padding: 1.2em 1.5em;
+  margin: 2.2rem 0;
+  overflow-x: auto;
+  box-shadow: 0 2px 16px rgba(52,152,219,0.06);
+  position: relative;
+}
+.entry-content pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+  border: none;
+  font-size: inherit;
+  box-shadow: none;
+}
+@media (max-width: 600px) {
+  .entry-content pre {
+    padding: 0.8em 0.6em;
+    font-size: 0.97em;
+  }
+}
+
+/* Padding for images with no caption */
+.entry-content img:not(figure img) {
+  display: block;
+  margin: 2.2rem auto;
+  padding: 0.7rem;
+  background: #fafbfc;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(52,152,219,0.07);
+  max-width: 100%;
+  height: auto;
+}
+
+/* Image captions styling */
+.entry-content figure figcaption {
+  font-style: italic;
+  color: var(--text-light);
+  margin-top: 0.2rem;
+  margin-bottom: 2.2rem;
+  text-align: left;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  font-family: var(--font-serif);
+}
+
+/* Visually appealing separators (hr) */
+.entry-content hr {
+  border: none;
+  height: 4px;
+  width: 80px;
+  margin: 3.5rem auto;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  opacity: 0.85;
+  box-shadow: 0 2px 12px rgba(52,152,219,0.08);
+  position: relative;
+}
+
+/* Add bottom margin to embeds for better spacing */
+.entry-content iframe,
+.entry-content embed,
+.entry-content object,
+.entry-content .wp-block-embed {
+  display: block;
+  margin-bottom: 2rem;
+  max-width: 100%;
+}
+
+/* Ensure embed wrapper does not add extra gap before caption */
+.wp-block-embed .wp-block-embed__wrapper {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Remove bottom margin from common aspect-ratio wrappers used by core embeds */
+.wp-embed-aspect-16-9 .wp-block-embed__wrapper,
+.wp-embed-aspect-4-3 .wp-block-embed__wrapper,
+.wp-embed-aspect-1-1 .wp-block-embed__wrapper,
+.wp-embed-aspect-21-9 .wp-block-embed__wrapper {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* ==========================================================================
+   Custom Footer Grid Layout
+   ========================================================================== */
+.footer-content.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-widget-area h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-white);
+}
+
+.footer-widget-area {
+    color: #eee;
+}
+
+.footer-social-links.spaced-icons a {
+    margin-bottom: 0.75rem;
+    font-size: 1.3rem;
+    color: var(--text-white);
+    transition: color var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: underline;
+}
+.footer-social-links.spaced-icons a:last-child {
+    margin-bottom: 0;
+}
+.footer-social-links.spaced-icons a:hover {
+    color: var(--primary-color);
+}
+
+.footer-social-links.spaced-icons a i,
+.footer-social-links.spaced-icons svg {
+    font-size: 1.3rem;
+    vertical-align: middle;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.footer-social-links.spaced-icons .social-name {
+    font-size: 0.95rem;
+    font-weight: 400;
+}
+
+.recent-posts-list,
+.best-posts-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.recent-posts-list li,
+.best-posts-list li {
+    margin-bottom: 0.75rem;
+}
+.recent-posts-list li:last-child,
+.best-posts-list li:last-child {
+    margin-bottom: 0;
+}
+.recent-posts-list a,
+.best-posts-list a {
+    color: var(--text-white);
+    text-decoration: underline;
+    transition: color var(--transition-fast);
+}
+.recent-posts-list a:hover,
+.best-posts-list a:hover {
+    color: var(--primary-color);
+}
+
+.footer-text {
+    color: #ccc;
+    font-size: 0.95rem;
+    margin-top: 2rem;
+}
+
+
+
+@media (max-width: 992px) {
+    .footer-content.footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+@media (max-width: 600px) {
+    .footer-content.footer-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    .footer-widget-area {
+        margin-bottom: 1.5rem;
+    }
+    .footer-widget-area:last-child {
+        margin-bottom: 0;
+    }
+} 
+
+/* Footer Custom Text Section */
+.footer-custom-text {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    color: #eee;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.footer-custom-text p {
+    margin-bottom: 1rem;
+}
+
+.footer-custom-text p:last-child {
+    margin-bottom: 0;
+}
+
+.footer-custom-text a {
+    color: var(--text-white);
+    text-decoration: underline;
+    transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+.footer-custom-text a:hover {
+    color: var(--primary-color);
+    opacity: 0.9;
+}
+
+/* Footer menu styled like recent posts */
+#footer-menu.menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+#footer-menu.menu li {
+    margin-bottom: 0.75rem;
+}
+#footer-menu.menu li:last-child {
+    margin-bottom: 0;
+}
+#footer-menu.menu a {
+    color: var(--text-white);
+    text-decoration: underline;
+    transition: color var(--transition-fast);
+}
+#footer-menu.menu a:hover {
+    color: var(--primary-color);
+} 
+
+/* Sticky Site Header - Fallback for older browsers */
+@supports not (position: sticky) {
+    .site-header {
+        position: fixed;
+    }
+}
+
+/* Ensure main content is not hidden under sticky header */
+.site-main {
+    padding-top: 0; /* Removed top padding */
+} 
+
+/* Fix admin bar spacing for consistent layout */
+.admin-bar .site-header {
+    top: 32px;
+}
+
+/* Admin bar adjustments for front page */
+.front-page.admin-bar .site-header {
+    top: 32px !important;
+}
+
+.front-page.admin-bar .hero-section {
+    margin-top: -162px; /* -130px - 32px admin bar */
+    padding-top: 162px; /* 130px + 32px admin bar */
+}
+
+@media screen and (max-width: 782px) {
+    .admin-bar .site-header {
+        top: 46px;
+    }
+    
+    .front-page.admin-bar .site-header {
+        top: 46px !important;
+    }
+    
+    .front-page.admin-bar .hero-section {
+        margin-top: -166px; /* -120px - 46px admin bar */
+        padding-top: 166px; /* 120px + 46px admin bar */
+    }
+} 
+
+/* Improved Unique Blog Pagination Styles */
+.pagination-unique {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.85rem;
+  margin: 6.5rem auto 0 auto;
+  padding: 1.5rem 0 0 0;
+  list-style: none;
+  width: 100%;
+  max-width: 100vw;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(4px);
+  border-radius: 2rem;
+  box-shadow: 0 8px 32px rgba(52,152,219,0.08), 0 1.5px 8px rgba(231,76,60,0.07);
+  padding-top: 2.5rem;
+}
+.pagination-unique .page-numbers {
+  display: inline-block;
+  min-width: 44px;
+  padding: 0.85rem 1.35rem;
+  border-radius: 999px;
+  background: var(--bg-white);
+  color: var(--text-dark);
+  border: 1.5px solid var(--border-color);
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.07);
+  font-weight: 600;
+  font-size: 1.08rem;
+  transition: all 0.18s cubic-bezier(.4,1.3,.6,1);
+  margin: 0 0.1rem;
+  position: relative;
+  text-align: center;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+}
+.pagination-unique .page-numbers.current,
+.pagination-unique .page-numbers:hover {
+  background: linear-gradient(90deg, var(--primary-color) 60%, var(--secondary-color) 100%);
+  color: var(--text-white);
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 16px rgba(231, 76, 60, 0.13), 0 1.5px 8px rgba(52, 152, 219, 0.09);
+  transform: scale(1.10) translateY(-2px);
+  z-index: 2;
+}
+.pagination-unique .page-numbers.prev,
+.pagination-unique .page-numbers.next {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: var(--bg-light);
+  color: var(--primary-color);
+  border: 1.5px solid var(--primary-color);
+  box-shadow: none;
+}
+.pagination-unique .page-numbers.prev:hover,
+.pagination-unique .page-numbers.next:hover {
+  background: var(--primary-color);
+  color: var(--text-white);
+  border-color: var(--primary-color);
+  transform: scale(1.12) translateY(-2px);
+}
+@media (max-width: 600px) {
+  .pagination-unique {
+    padding: 1rem 0 0 0;
+    gap: 0.5rem;
+  }
+  .pagination-unique .page-numbers {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.97rem;
+  }
+} 
+
+/* Card titles use secondary color - Override default card styles */
+.card h3,
+.card-title,
+.card h3 a {
+  color: var(--secondary-color);
+}
+.card h3 a:hover,
+.card-title a:hover {
+  color: var(--primary-color);
+}
+
+/* Body/content links use secondary color except main nav */
+.entry-content a {
+  color: var(--secondary-color);
+  text-decoration: underline;
+  transition: color var(--transition-fast);
+}
+.entry-content a:hover {
+  color: var(--primary-color);
+}
+
+.wp-block-buttons > .wp-block-button a {
+  text-decoration: none !important;
+} 
+
+.wp-block-buttons > .wp-block-button {
+  font-family: var(--font-sans);
+} 
+
+/* ==========================================================================
+   WordPress Block Button Styles - Enhanced & Visually Appealing
+   ========================================================================== */
+
+/* Base WordPress Block Button Container */
+.wp-block-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 2rem 0;
+    align-items: center;
+}
+
+.wp-block-buttons.aligncenter {
+    justify-content: center;
+}
+
+.wp-block-buttons.alignleft {
+    justify-content: flex-start;
+}
+
+.wp-block-buttons.alignright {
+    justify-content: flex-end;
+}
+
+/* Individual Button Block */
+.wp-block-button {
+    margin: 0;
+    display: inline-block;
+}
+
+/* Primary Button Link Styles */
+.wp-block-button__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-decoration: none !important;
+    text-align: center;
+    color: var(--text-white) !important;
+    background: var(--button-primary-bg);
+    border: 2px solid var(--primary-color);
+    border-radius: var(--button-border-radius);
+    box-shadow: var(--button-shadow);
+    transition: var(--transition-smooth);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    min-width: 120px;
+    white-space: nowrap;
+}
+
+/* Button Hover Effects */
+.wp-block-button__link:hover {
+    background: var(--button-primary-hover-bg);
+    border-color: var(--primary-hover);
+    color: var(--text-white) !important;
+    transform: translateY(-2px);
+    box-shadow: var(--button-shadow-hover);
+}
+
+/* Button Focus States for Accessibility */
+.wp-block-button__link:focus {
+    outline: 3px solid rgba(231, 76, 60, 0.3);
+    outline-offset: 2px;
+    background: var(--button-primary-hover-bg);
+    border-color: var(--primary-hover);
+}
+
+/* Button Active State */
+.wp-block-button__link:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+}
+
+/* Outline Button Style */
+.wp-block-button.is-style-outline .wp-block-button__link {
+    background: transparent;
+    color: var(--primary-color) !important;
+    border: 2px solid var(--primary-color);
+    box-shadow: none;
+}
+
+.wp-block-button.is-style-outline .wp-block-button__link:hover {
+    background: var(--primary-color);
+    color: var(--text-white) !important;
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(231, 76, 60, 0.25);
+}
+
+/* Secondary Button Style */
+.wp-block-button.is-style-secondary .wp-block-button__link {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, #2980b9 100%);
+    border-color: var(--secondary-color);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25);
+}
+
+.wp-block-button.is-style-secondary .wp-block-button__link:hover {
+    background: linear-gradient(135deg, var(--secondary-hover) 0%, #21618c 100%);
+    border-color: var(--secondary-hover);
+    box-shadow: 0 8px 25px rgba(52, 152, 219, 0.35);
+}
+
+/* Ghost/Text Button Style */
+.wp-block-button.is-style-ghost .wp-block-button__link {
+    background: transparent;
+    color: var(--primary-color) !important;
+    border: 2px solid transparent;
+    box-shadow: none;
+    padding: 0.75rem 1.5rem;
+}
+
+.wp-block-button.is-style-ghost .wp-block-button__link:hover {
+    background: rgba(231, 76, 60, 0.1);
+    border-color: transparent;
+    color: var(--primary-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.15);
+}
+
+/* Large Button Size */
+.wp-block-button.is-style-large .wp-block-button__link {
+    padding: 1.125rem 2.25rem;
+    font-size: 1.125rem;
+    border-radius: var(--button-border-radius-large);
+    min-width: 160px;
+}
+
+/* Small Button Size */
+.wp-block-button.is-style-small .wp-block-button__link {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    border-radius: var(--button-border-radius-small);
+    min-width: 100px;
+}
+
+/* Button with Icon Support */
+.wp-block-button__link svg,
+.wp-block-button__link i {
+    width: 1.2em;
+    height: 1.2em;
+    flex-shrink: 0;
+}
+
+/* Button with Loading State */
+.wp-block-button.is-loading .wp-block-button__link {
+    position: relative;
+    color: transparent !important;
+}
+
+.wp-block-button.is-loading .wp-block-button__link::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: button-spin 1s linear infinite;
+}
+
+@keyframes button-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Disabled Button State */
+.wp-block-button__link:disabled,
+.wp-block-button__link[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Button Group Styles */
+.wp-block-buttons.is-vertical {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.wp-block-buttons.is-vertical .wp-block-button {
+    width: 100%;
+}
+
+.wp-block-buttons.is-vertical .wp-block-button__link {
+    width: 100%;
+    justify-content: center;
+}
+
+/* Responsive Button Adjustments */
+@media (max-width: 768px) {
+    .wp-block-buttons {
+        gap: 0.75rem;
+        margin: 1.5rem 0;
+    }
+    
+    .wp-block-button__link {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.95rem;
+        min-width: 100px;
+    }
+    
+    .wp-block-button.is-style-large .wp-block-button__link {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+    }
+    
+    .wp-block-button.is-style-small .wp-block-button__link {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    /* Stack buttons vertically on very small screens */
+    @media (max-width: 480px) {
+        .wp-block-buttons:not(.is-vertical) {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .wp-block-buttons:not(.is-vertical) .wp-block-button {
+            width: 100%;
+        }
+        
+        .wp-block-buttons:not(.is-vertical) .wp-block-button__link {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+}
+
+/* Button Animation on Page Load */
+.wp-block-button {
+    animation: button-fade-in 0.6s ease-out;
+}
+
+@keyframes button-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Enhanced Button Variations */
+.wp-block-button.is-style-gradient .wp-block-button__link {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border-color: transparent;
+}
+
+.wp-block-button.is-style-gradient .wp-block-button__link:hover {
+    background: linear-gradient(135deg, var(--primary-hover) 0%, var(--secondary-hover) 100%);
+    transform: translateY(-2px) scale(1.02);
+}
+
+.wp-block-button.is-style-soft .wp-block-button__link {
+    background: rgba(231, 76, 60, 0.1);
+    color: var(--primary-color) !important;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.wp-block-button.is-style-soft .wp-block-button__link:hover {
+    background: var(--primary-color);
+    color: var(--text-white) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(231, 76, 60, 0.25);
+}
+
+/* Button with Border Animation */
+.wp-block-button.is-style-border-animate .wp-block-button__link {
+    position: relative;
+    overflow: hidden;
+    background: transparent;
+    color: var(--primary-color) !important;
+    border: 2px solid var(--primary-color);
+    z-index: 1;
+}
+
+.wp-block-button.is-style-border-animate .wp-block-button__link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--primary-color);
+    transition: left 0.3s ease;
+    z-index: -1;
+}
+
+.wp-block-button.is-style-border-animate .wp-block-button__link:hover::before {
+    left: 0;
+}
+
+.wp-block-button.is-style-border-animate .wp-block-button__link:hover {
+    color: var(--text-white) !important;
+    transform: translateY(-2px);
+}
+
+/* Remove default WordPress button styles that might conflict */
+.wp-block-button__link:not(.has-background) {
+    background: var(--primary-color);
+}
+
+.wp-block-button__link:not(.has-text-color) {
+    color: var(--text-white) !important;
+}
+
+/* Ensure buttons work well in content areas */
+.entry-content .wp-block-buttons,
+.wp-block-post-content .wp-block-buttons {
+    margin: 2rem 0;
+}
+
+/* Button spacing in different contexts */
+.wp-block-buttons + .wp-block-buttons {
+    margin-top: 1rem;
+}
+
+/* Enhanced focus styles for better accessibility */
+.wp-block-button__link:focus-visible {
+    outline: 3px solid rgba(231, 76, 60, 0.4);
+    outline-offset: 3px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .wp-block-button__link {
+        border-width: 3px;
+    }
+    
+    .wp-block-button__link:focus {
+        outline-width: 4px;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .wp-block-button__link,
+    .wp-block-button__link:hover,
+    .wp-block-button__link:focus {
+        transition: none;
+        transform: none;
+    }
+    
+    .wp-block-button {
+        animation: none;
+    }
+    
+    .wp-block-button.is-loading .wp-block-button__link::after {
+        animation: none;
+    }
+}
+
+/* ==========================================================================
+   WordPress Block Table Styles
+   ========================================================================== */
+
+.wp-block-table {
+    margin-bottom: 2rem;
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: var(--button-border-radius);
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.wp-block-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.wp-block-table th,
+.wp-block-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.wp-block-table th {
+    background-color: var(--bg-light);
+    font-weight: 600;
+    color: var(--text-dark);
+    font-family: var(--font-sans);
+}
+
+.wp-block-table td {
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+}
+
+.wp-block-table tr:hover td {
+    background-color: rgba(231, 76, 60, 0.05);
+}
+
+/* Table alignment options */
+.wp-block-table.alignwide {
+    max-width: var(--container-max-width);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.wp-block-table.alignfull {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+    .wp-block-table {
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .wp-block-table th,
+    .wp-block-table td {
+        padding: 0.5rem 0.75rem;
+    }
+}
+
+/* ==========================================================================
+   WordPress Block Image Styles
+   ========================================================================== */
+
+.wp-block-image {
+    margin-bottom: 2rem;
+}
+
+/* ==========================================================================
+   WordPress Block Gallery Styles
+   ========================================================================== */
+
+.wp-block-gallery {
+    margin-bottom: 2rem;
+    padding: 0 !important; /* Match embed: no internal padding */
+}
+
+/* Gallery without caption - extra margin bottom */
+.wp-block-gallery:not(:has(figcaption)) {
+    margin-bottom: 2.5rem;
+}
+
+/* Gallery with caption - remove margin between gallery and caption */
+.wp-block-gallery:has(figcaption) {
+    margin-bottom: 0;
+}
+
+/* Gallery caption positioning */
+.wp-block-gallery figcaption {
+    margin-top: 0.2rem;
+    margin-bottom: 2rem;
+}
+
+.wp-block-image img {
+    border-radius: var(--button-border-radius);
+    margin-bottom: 1rem;
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Remove bottom margin from images within galleries */
+.wp-block-gallery .wp-block-image img,
+.wp-block-gallery img,
+.wp-block-gallery .wp-block-image {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+/* Ensure gallery items have no extra padding to match embed */
+.wp-block-gallery .blocks-gallery-item,
+.wp-block-gallery .blocks-gallery-grid,
+.wp-block-gallery .wp-block-image {
+    padding: 0 !important;
+}
+
+/* Image with caption */
+.wp-block-image figcaption {
+    margin-top: 0.2rem;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    text-align: left;
+    font-style: italic;
+    line-height: 1.3;
+}
+
+/* Image without caption - extra margin bottom */
+.wp-block-image:not(:has(figcaption)) img {
+    margin-bottom: 1.5rem;
+}
+
+/* Responsive image adjustments */
+@media (max-width: 768px) {
+    .wp-block-image {
+        margin-bottom: 1.5rem;
+    }
+    
+    .wp-block-image img {
+        margin-bottom: 0.75rem;
+        border-radius: var(--button-border-radius-small);
+    }
+    
+    /* Remove bottom margin from gallery images on mobile */
+    .wp-block-gallery .wp-block-image img,
+    .wp-block-gallery img,
+    .wp-block-gallery .wp-block-image {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+    }
+    
+    .wp-block-image:not(:has(figcaption)) img {
+        margin-bottom: 1rem;
+    }
+    
+    .wp-block-image figcaption {
+        font-size: 0.7rem;
+        margin-top: 0.15rem;
+    }
+    
+    /* Gallery responsive adjustments */
+    .wp-block-gallery {
+        margin-bottom: 1.5rem;
+    }
+    
+    .wp-block-gallery:not(:has(figcaption)) {
+        margin-bottom: 2rem;
+    }
+    
+    .wp-block-gallery figcaption {
+        margin-bottom: 1.5rem;
+    }
+}
+
+/* ==========================================================================
+   WordPress Block Caption Styles - Universal Caption Styling
+   ========================================================================== */
+
+/* All WordPress block captions */
+.wp-block-image figcaption,
+.wp-block-gallery figcaption,
+.wp-block-embed figcaption,
+.wp-block-video figcaption,
+.wp-block-audio figcaption,
+.wp-block-file figcaption,
+.wp-block-media-text figcaption,
+.wp-block-cover figcaption,
+.wp-element-caption {
+    margin-top: 0.2rem;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    text-align: left !important;
+    font-style: italic;
+    line-height: 1.3;
+    font-family: var(--font-serif);
+}
+
+/* Gallery captions */
+.wp-block-gallery .blocks-gallery-item figcaption,
+.wp-block-gallery .blocks-gallery-caption {
+    margin-top: 0.2rem;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    text-align: left !important;
+    font-style: italic;
+    line-height: 1.3;
+    font-family: var(--font-serif);
+}
+
+/* Gallery with nested image captions: make text white */
+.wp-block-gallery.has-nested-images figure.wp-block-image figcaption {
+    color: #fff !important;
+}
+
+/* Embed captions */
+.wp-block-embed .wp-block-embed__caption {
+    margin-top: 0.2rem;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    text-align: left !important;
+    font-style: italic;
+    line-height: 1.3;
+    font-family: var(--font-serif);
+}
+
+/* Video and audio captions */
+.wp-block-video .wp-block-video__caption,
+.wp-block-audio .wp-block-audio__caption {
+    margin-top: 0.2rem;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    text-align: left !important;
+    font-style: italic;
+    line-height: 1.3;
+    font-family: var(--font-serif);
+}
+
+/* File block captions */
+.wp-block-file .wp-block-file__caption {
+    margin-top: 0.2rem;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    text-align: left !important;
+    font-style: italic;
+    line-height: 1.3;
+    font-family: var(--font-serif);
+}
+
+/* Media text captions */
+.wp-block-media-text .wp-block-media-text__caption {
+    margin-top: 0.2rem;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    text-align: left !important;
+    font-style: italic;
+    line-height: 1.3;
+    font-family: var(--font-serif);
+}
+
+/* Cover block captions */
+.wp-block-cover .wp-block-cover__caption {
+    margin-top: 0.2rem;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    text-align: left !important;
+    font-style: italic;
+    line-height: 1.3;
+    font-family: var(--font-serif);
+}
+
+/* Responsive caption adjustments */
+@media (max-width: 768px) {
+    .wp-block-image figcaption,
+    .wp-block-gallery figcaption,
+    .wp-block-embed figcaption,
+    .wp-block-video figcaption,
+    .wp-block-audio figcaption,
+    .wp-block-file figcaption,
+    .wp-block-media-text figcaption,
+    .wp-block-cover figcaption,
+    .wp-element-caption,
+    .wp-block-gallery .blocks-gallery-item figcaption,
+    .wp-block-gallery .blocks-gallery-caption,
+    .wp-block-embed .wp-block-embed__caption,
+    .wp-block-video .wp-block-video__caption,
+    .wp-block-audio .wp-block-audio__caption,
+    .wp-block-file .wp-block-file__caption,
+    .wp-block-media-text .wp-block-media-text__caption,
+    .wp-block-cover .wp-block-cover__caption {
+        font-size: 0.7rem;
+        margin-top: 0.15rem;
+        text-align: left !important;
+    }
+}
+
+/* Override WordPress default caption styles */
+.entry-content figcaption,
+.post-content figcaption,
+.wp-block-image figcaption,
+.wp-block-gallery figcaption,
+.wp-block-embed figcaption,
+.wp-block-video figcaption,
+.wp-block-audio figcaption,
+.wp-block-file figcaption,
+.wp-block-media-text figcaption,
+.wp-block-cover figcaption,
+.wp-element-caption {
+    margin-top: 0.2rem !important;
+    font-size: 0.75rem !important;
+    color: var(--text-light) !important;
+    text-align: left !important;
+    text-align-last: left !important;
+    font-style: italic !important;
+    line-height: 1.3 !important;
+    font-family: var(--font-serif) !important;
+}
+
+/* Additional specificity for WordPress core styles */
+.wp-block-image figcaption,
+.wp-block-gallery figcaption,
+.wp-block-embed figcaption,
+.wp-block-video figcaption,
+.wp-block-audio figcaption,
+.wp-block-file figcaption,
+.wp-block-media-text figcaption,
+.wp-block-cover figcaption,
+.wp-element-caption,
+.wp-block-image .wp-element-caption,
+.wp-block-gallery .wp-element-caption,
+.wp-block-embed .wp-element-caption {
+    margin-top: 0.2rem !important;
+    font-size: 0.75rem !important;
+    color: var(--text-light) !important;
+    text-align: left !important;
+    text-align-last: left !important;
+    font-style: italic !important;
+    line-height: 1.3 !important;
+    font-family: var(--font-serif) !important;
+    justify-content: flex-start !important;
+}
+
+/* Catch-all for any remaining caption inconsistencies */
+figcaption,
+[class*="caption"],
+.wp-caption-text,
+.blocks-gallery-caption,
+.wp-block-embed__caption,
+.wp-block-video__caption,
+.wp-block-audio__caption {
+    margin-top: 0.2rem !important;
+    font-size: 0.75rem !important;
+    color: var(--text-light) !important;
+    text-align: left !important;
+    font-style: italic !important;
+    line-height: 1.3 !important;
+    font-family: var(--font-serif) !important;
+}
+
+/* Mobile caption catch-all */
+@media (max-width: 768px) {
+    figcaption,
+    [class*="caption"],
+    .wp-caption-text,
+    .blocks-gallery-caption,
+    .wp-block-embed__caption,
+    .wp-block-video__caption,
+    .wp-block-audio__caption {
+        font-size: 0.7rem !important;
+        margin-top: 0.15rem !important;
+    }
+}
+
+/* ==========================================================================
+   Easy Table of Contents (EZ-TOC) Styling
+   ========================================================================== */
+
+/* Main TOC Container */
+#ez-toc-container {
+    background: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+#ez-toc-container .ez-toc-title-container {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+#ez-toc-container .ez-toc-title {
+    font-family: var(--font-sans);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--heading-color);
+    margin: 0;
+}
+
+/* TOC List Styling */
+#ez-toc-container ul,
+#ez-toc-container ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#ez-toc-container ul li,
+#ez-toc-container ol li {
+    margin: 0.5rem 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* Nested list indentation */
+#ez-toc-container ul ul,
+#ez-toc-container ol ol {
+    margin-left: 1.5rem;
+    margin-top: 0.5rem;
+}
+
+/* TOC Links - WITH UNDERLINES */
+#ez-toc-container a {
+    color: var(--secondary-color);
+    text-decoration: underline;
+    transition: color var(--transition-fast);
+    font-weight: 500;
+}
+
+#ez-toc-container a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+#ez-toc-container a:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Active/current link */
+#ez-toc-container a.active,
+#ez-toc-container a:active {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Toggle button */
+#ez-toc-container .ez-toc-toggle {
+    color: var(--secondary-color);
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+#ez-toc-container .ez-toc-toggle:hover {
+    color: var(--primary-color);
+}
+
+/* Responsive adjustments for TOC */
+@media (max-width: 768px) {
+    #ez-toc-container {
+        padding: 1rem;
+        margin: 1.5rem 0;
+    }
+    
+    #ez-toc-container .ez-toc-title {
+        font-size: 1.1rem;
+    }
+    
+    #ez-toc-container ul ul,
+    #ez-toc-container ol ol {
+        margin-left: 1rem;
+    }
+}
+
+/* Sticky TOC (if positioned as sticky) */
+#ez-toc-container.sticky {
+    position: sticky;
+    top: calc(var(--header-height) + 20px);
+    max-height: calc(100vh - var(--header-height) - 40px);
+    overflow-y: auto;
+}
+
+/* ==========================================================================
+   CSS Fixes Summary
+   ========================================================================== 
+   
+   This file has been optimized with the following improvements:
+   
+   1. Added CSS Custom Properties (variables) for consistent theming
+   2. Fixed conflicting header positioning (sticky vs relative)
+   3. Consolidated duplicate CSS rules
+   4. Updated all color references to use CSS variables
+   5. Improved accessibility with proper focus states
+   6. Fixed mobile responsive header height inconsistencies
+   7. Standardized transition timing across components
+   8. Removed redundant style declarations
+   9. Improved maintainability and readability
+   
+   ========================================================================== */
+/* ========================================
+   Breadcrumb Navigation Styles
+   ======================================== */
+
+.breadcrumb {
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+.breadcrumb-list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 8px;
+}
+
+.breadcrumb-item {
+    display: inline-flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.breadcrumb-link {
+    color: #6b7280;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    display: inline-block;
+    padding: 4px 0;
+}
+
+.breadcrumb-link:hover {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.breadcrumb-link-current {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.breadcrumb-separator {
+    color: #d1d5db;
+    font-weight: 400;
+    user-select: none;
+    font-size: 0.85rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .breadcrumb {
+        margin-bottom: 16px;
+        font-size: 0.85rem;
+    }
+
+    .breadcrumb-link {
+        font-size: 0.85rem;
+    }
+
+    .breadcrumb-separator {
+        font-size: 0.8rem;
+    }
+}
