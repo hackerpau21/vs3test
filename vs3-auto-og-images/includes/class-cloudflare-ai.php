@@ -326,23 +326,21 @@ class VS3_Auto_OG_Cloudflare_AI {
      * @return string The X-marks prompt
      */
     private function get_xmarks_prompt() {
-        return 'Create a minimalist pattern background. Pure white background color. ' .
-               'Draw simple X marks made of two thin crossed lines (not filled shapes, just line strokes). ' .
-               'LAYOUT: Arrange X marks in a regular grid pattern with 7-8 columns and 6-7 rows. ' .
-               'Alternate rows should be offset horizontally to create a staggered brick-like pattern. ' .
-               'SIZE: Every X mark must be EXACTLY the same size - approximately 25-30 pixels, with 3-4 pixel line thickness. ' .
-               'COLORS: Randomly assign each X one of these colors: red, cyan, bright green, yellow, gray, pink. ' .
-               'Each X should be a single solid color. Mix colors randomly so no two adjacent X marks share the same color. ' .
-               'STYLE: Clean, flat, minimal design like a modern blog or tech website background pattern. ' .
-               'Similar to confetti or scattered typography marks on white paper. ' .
+        return 'A clean, minimal background pattern made of small X marks arranged in evenly spaced diagonal rows. ' .
+               'Each row is slightly offset from the next, forming a subtle zig-zag lattice. ' .
+               'The X marks follow a consistent path across the canvas, with uniform spacing and no randomness. ' .
+               'Pure white background. Flat, vector-style, playful but orderly. ' .
+               'COLORS: Use only BRIGHT vibrant colors - bright red, bright cyan, bright green, bright yellow, hot pink, bright blue, bright orange. ' .
+               'Each X mark is a different bright color randomly assigned. Mix all colors throughout the pattern. ' .
+               'SIZE: All X marks must be IDENTICAL in size - small, uniform, consistent. ' .
+               'STYLE: Clean, flat, minimal vector design. Two thin crossed lines forming each X (line strokes, not filled). ' .
                'CRITICAL: ' .
                '1. Pure white background only. ' .
-               '2. X marks are LINE STROKES only - two thin lines crossing, not solid filled shapes. ' .
-               '3. ALL X marks IDENTICAL in size - no variation whatsoever. ' .
+               '2. BRIGHT colors only - no brown, no gray, no muted tones, no dark colors. ' .
+               '3. ALL X marks IDENTICAL in size - uniform throughout. ' .
                '4. Flat solid colors only - no gradients, shadows, or 3D effects. ' .
-               '5. Even spacing throughout the grid pattern. ' .
-               '6. Colorful variety - use all the colors randomly distributed. ' .
-               'FORBIDDEN: filled shapes, varying sizes, thick bold marks, gradients, shadows, 3D effects, uneven spacing.';
+               '5. Even spacing in diagonal rows with zig-zag offset pattern. ' .
+               'FORBIDDEN: brown, gray, muted colors, dark colors, varying sizes, gradients, shadows, 3D effects.';
     }
     
     /**
