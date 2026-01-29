@@ -300,111 +300,46 @@ class VS3_Auto_OG_Cloudflare_AI {
     
     /**
      * Generate a prompt for OG image background based on post content
-     * 
+     *
      * @param WP_Post $post The post object
      * @param array $settings Design settings
      * @return string The generated prompt
      */
     public function generate_prompt($post, $settings = array()) {
-        $title = html_entity_decode(get_the_title($post->ID), ENT_QUOTES, 'UTF-8');
-        $site_name = get_bloginfo('name');
-        
-        // Get post excerpt or content summary
-        $excerpt = $post->post_excerpt;
-        if (empty($excerpt)) {
-            $excerpt = wp_trim_words(strip_tags($post->post_content), 30, '');
-        }
-        
-        // Get custom prompt template if set, otherwise use default
-        $prompt_template = isset($settings['cf_prompt_template']) && !empty($settings['cf_prompt_template'])
-            ? $settings['cf_prompt_template']
-            : $this->get_default_prompt_template();
-        
-        // Get style preference
-        $style = isset($settings['cf_style']) ? $settings['cf_style'] : 'abstract';
-        $style_description = $this->get_style_description($style);
-        
-        // Special handling for x-marks style - use a very specific prompt
-        if ($style === 'x-marks' && empty($settings['cf_prompt_template'])) {
-            $prompt = 'Create a clean white or very light background. Scatter X marks across the entire background in various flat solid colors: light green, pink, yellow, blue, and light grey. ' .
-                     'Each X mark is a simple geometric shape - two intersecting straight lines forming an X. ' .
-                     'Use consistent sizing for all X marks. Distribute them evenly across the background. ' .
-                     'CRITICAL REQUIREMENTS: Use ONLY flat solid colors - absolutely NO gradients, NO color blends, NO flowing shapes, NO organic curves, NO wavy lines. ' .
-                     'Each X mark must have sharp, crisp, defined edges. The background must be plain white or very light. ' .
-                     'Think minimalist geometric pattern - like stamps or stickers scattered evenly on white paper. ' .
-                     'The left side should be lighter or have fewer X marks to accommodate text overlay.';
-        } else {
-            // Replace placeholders in template
-            $prompt = str_replace(
-                array('{title}', '{excerpt}', '{site_name}', '{style}'),
-                array($title, $excerpt, $site_name, $style_description),
-                $prompt_template
-            );
-        }
-        
-        // If custom prompt is used, enhance it to be more explicit
-        $is_custom_prompt = isset($settings['cf_prompt_template']) && !empty($settings['cf_prompt_template']);
-        
-        if ($is_custom_prompt) {
-            $lower_prompt = strtolower($prompt);
-            
-            // Check if user's prompt mentions gradients - if not, STRONGLY avoid them
-            if (strpos($lower_prompt, 'gradient') === false && 
-                strpos($lower_prompt, 'smooth transition') === false &&
-                strpos($lower_prompt, 'blend') === false &&
-                strpos($lower_prompt, 'flowing') === false &&
-                strpos($lower_prompt, 'soft') === false) {
-                
-                // Add STRONG anti-gradient instruction at the beginning
-                $prompt = 'IMPORTANT: Do NOT create gradients, smooth color blends, flowing shapes, or soft transitions. ' . 
-                         'Use flat colors, sharp edges, distinct shapes, and geometric patterns instead. ' . $prompt;
-                
-                // Also add it at the end (AI models often pay more attention to the end)
-                $prompt = $prompt . ' CRITICAL: Absolutely NO gradients, NO smooth color transitions, NO flowing organic shapes. Use flat solid colors and sharp geometric patterns only.';
-            }
-            
-            // Enhance prompts that mention X marks - make it VERY specific
-            if (strpos($lower_prompt, 'x mark') !== false || strpos($lower_prompt, 'x marks') !== false) {
-                $prompt = 'Create a clean white or light background with scattered X marks in various flat solid colors like light green, pink, yellow, blue, and light grey. ' .
-                         'Each X mark should be a simple geometric shape - two intersecting lines forming an X. ' .
-                         'Use consistent sizing for the X marks. Distribute them evenly across the entire background. ' .
-                         'CRITICAL: Use ONLY flat solid colors - NO gradients, NO color blends, NO flowing shapes, NO organic curves. ' .
-                         'Each X mark must have sharp, crisp edges. The background should be plain white or very light. ' .
-                         'Think minimalist geometric pattern - like stamps or stickers scattered on white paper. ' . $prompt;
-            }
-            
-            if (strpos($lower_prompt, 'textured') !== false || strpos($lower_prompt, 'texture') !== false) {
-                $prompt = 'Focus on texture and pattern details with distinct shapes. ' . 
-                         'Use flat colors and sharp edges - NO smooth gradients or color blends. ' . $prompt;
-            }
-        }
-        
+        // Always use the X-marks pattern regardless of style setting
+        // This creates a clean, consistent look across all OG images
+        $prompt = $this->get_xmarks_prompt();
+
         // Sanitize prompt to avoid false NSFW positives
         $prompt = $this->sanitize_prompt($prompt);
-        
-        // FINAL STEP: Add strong anti-gradient instructions to ALL prompts unless gradient is explicitly requested
-        $lower_prompt_final = strtolower($prompt);
-        $style_lower = isset($settings['cf_style']) ? strtolower($settings['cf_style']) : '';
-        
-        // Only skip anti-gradient if user explicitly selected "gradient" style or mentions gradients in prompt
-        if ($style_lower !== 'gradient' && 
-            strpos($lower_prompt_final, 'gradient') === false &&
-            strpos($lower_prompt_final, 'smooth blend') === false &&
-            strpos($lower_prompt_final, 'flowing') === false) {
-            
-            // Add VERY strong anti-gradient instructions at the beginning AND end
-            $anti_gradient_start = 'MANDATORY REQUIREMENTS: Use ONLY flat solid colors, sharp geometric shapes, distinct patterns with crisp edges. ';
-            $anti_gradient_start .= 'ABSOLUTELY FORBIDDEN: gradients, smooth color blends, flowing organic shapes, wavy lines, soft transitions, color fades. ';
-            
-            $anti_gradient_end = ' REMINDER: NO gradients, NO smooth blends, NO flowing shapes, NO organic curves. Only flat colors and sharp geometric patterns are allowed.';
-            
-            $prompt = $anti_gradient_start . $prompt . $anti_gradient_end;
-        }
-        
+
         // Log the final prompt for debugging
         $this->log_error('Final prompt: ' . substr($prompt, 0, 200));
-        
+
         return $prompt;
+    }
+
+    /**
+     * Get the X-marks pattern prompt
+     * Creates a white background with medium-sized colorful X marks in a pattern
+     *
+     * @return string The X-marks prompt
+     */
+    private function get_xmarks_prompt() {
+        return 'Create a simple, clean background image with a white or very light background. ' .
+               'Place medium-sized X marks arranged in a regular grid or repeating pattern across the entire image. ' .
+               'Each X mark should be made of two intersecting straight lines forming an X shape. ' .
+               'The X marks should be in different bright, cheerful flat colors: red, blue, green, yellow, orange, pink, and purple. ' .
+               'All X marks should be approximately the same size - medium sized, clearly visible but not too large. ' .
+               'The X marks should be evenly spaced in a consistent pattern like a wallpaper or textile design. ' .
+               'CRITICAL REQUIREMENTS: ' .
+               '1. Background MUST be pure white or very light gray - no colors, no gradients. ' .
+               '2. Use ONLY flat solid colors for the X marks - absolutely NO gradients, NO color blends, NO shadows. ' .
+               '3. Each X mark must have sharp, crisp, clean edges - no blur, no glow, no soft edges. ' .
+               '4. NO flowing shapes, NO organic curves, NO wavy lines, NO abstract art. ' .
+               '5. Think of simple geometric stamps or stickers arranged neatly on white paper. ' .
+               '6. The pattern should look like a cheerful, colorful, minimalist wallpaper design. ' .
+               'FORBIDDEN: gradients, color transitions, flowing colors, organic shapes, abstract swirls, bokeh, blur effects.';
     }
     
     /**
@@ -435,15 +370,10 @@ class VS3_Auto_OG_Cloudflare_AI {
     
     /**
      * Get default prompt template
+     * Note: This is kept for backwards compatibility but the plugin now uses the X-marks pattern by default
      */
     public function get_default_prompt_template() {
-        return 'Create a beautiful background image for social media. ' .
-               '{style}. ' .
-               'CRITICAL: Use ONLY flat solid colors, sharp geometric shapes, and distinct patterns. ' .
-               'ABSOLUTELY NO gradients, NO smooth color blends, NO flowing organic shapes, NO wavy lines, NO soft transitions. ' .
-               'The LEFT SIDE of the image should be lighter or have subtle tones suitable for dark text overlay. ' .
-               'The RIGHT SIDE can be more colorful and vibrant. ' .
-               'No text, no faces, no people, no specific objects - just elegant abstract art with sharp edges and flat colors.';
+        return $this->get_xmarks_prompt();
     }
     
     /**

@@ -78,9 +78,14 @@ class VS3_Auto_OG_Settings {
                 'default_bg_color' => sanitize_hex_color($_POST['vs3_auto_og_bg_color']),
                 'default_text_color' => sanitize_hex_color($_POST['vs3_auto_og_text_color']),
                 'default_accent_color' => sanitize_hex_color($_POST['vs3_auto_og_accent_color']),
+                // Cloudflare AI settings
+                'cf_enabled' => isset($_POST['vs3_auto_og_cf_enabled']) ? 1 : 0,
+                'cf_account_id' => isset($_POST['vs3_auto_og_cf_account_id']) ? sanitize_text_field($_POST['vs3_auto_og_cf_account_id']) : '',
+                'cf_api_token' => isset($_POST['vs3_auto_og_cf_api_token']) ? sanitize_text_field($_POST['vs3_auto_og_cf_api_token']) : '',
+                'cf_model' => isset($_POST['vs3_auto_og_cf_model']) ? sanitize_text_field($_POST['vs3_auto_og_cf_model']) : 'flux-1-schnell',
                 'cache_version' => time(),
             );
-            
+
             update_site_option('vs3_auto_og_network_settings', $settings);
             
             add_action('network_admin_notices', function() {
@@ -275,7 +280,13 @@ class VS3_Auto_OG_Settings {
             'default_bg_color' => '#ffffff',
             'default_text_color' => '#000000',
             'default_accent_color' => '#0073aa',
+            'cf_enabled' => false,
+            'cf_account_id' => '',
+            'cf_api_token' => '',
+            'cf_model' => 'flux-1-schnell',
         ));
+
+        $models = VS3_Auto_OG_Cloudflare_AI::get_available_models();
         
         ?>
         <div class="wrap">
@@ -325,7 +336,77 @@ class VS3_Auto_OG_Settings {
                         </td>
                     </tr>
                 </table>
-                
+
+                <h2><?php echo esc_html__('Cloudflare AI Settings (Network-Wide)', 'vs3-auto-og'); ?></h2>
+                <p class="description">
+                    <?php echo esc_html__('These Cloudflare AI credentials will be used by all sites in the network. Individual sites will not need to enter their own credentials.', 'vs3-auto-og'); ?>
+                </p>
+
+                <table class="form-table">
+                    <tr>
+                        <th scope="row"><?php echo esc_html__('Enable AI Generation', 'vs3-auto-og'); ?></th>
+                        <td>
+                            <label>
+                                <input type="checkbox" name="vs3_auto_og_cf_enabled" value="1" <?php checked($settings['cf_enabled'], 1); ?> />
+                                <?php echo esc_html__('Enable Cloudflare AI for all sites in the network', 'vs3-auto-og'); ?>
+                            </label>
+                            <p class="description">
+                                <?php echo esc_html__('Generate AI-powered backgrounds using Cloudflare Workers AI.', 'vs3-auto-og'); ?>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><?php echo esc_html__('Account ID', 'vs3-auto-og'); ?></th>
+                        <td>
+                            <input type="text" name="vs3_auto_og_cf_account_id"
+                                   value="<?php echo esc_attr($settings['cf_account_id']); ?>"
+                                   class="regular-text"
+                                   placeholder="<?php echo esc_attr__('Your Cloudflare Account ID', 'vs3-auto-og'); ?>" />
+                            <p class="description">
+                                <?php echo esc_html__('Find this in your Cloudflare dashboard under Workers & Pages.', 'vs3-auto-og'); ?>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><?php echo esc_html__('API Token', 'vs3-auto-og'); ?></th>
+                        <td>
+                            <input type="password" name="vs3_auto_og_cf_api_token"
+                                   value="<?php echo esc_attr($settings['cf_api_token']); ?>"
+                                   class="regular-text"
+                                   placeholder="<?php echo esc_attr__('Your Cloudflare API Token', 'vs3-auto-og'); ?>" />
+                            <p class="description">
+                                <?php
+                                printf(
+                                    /* translators: %s: link to Cloudflare dashboard */
+                                    esc_html__('Create an API token with "Workers AI" read permission in the %s.', 'vs3-auto-og'),
+                                    '<a href="https://dash.cloudflare.com/profile/api-tokens" target="_blank">' .
+                                    esc_html__('Cloudflare Dashboard', 'vs3-auto-og') .
+                                    '</a>'
+                                );
+                                ?>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><?php echo esc_html__('AI Model', 'vs3-auto-og'); ?></th>
+                        <td>
+                            <select name="vs3_auto_og_cf_model">
+                                <?php foreach ($models as $key => $model): ?>
+                                    <option value="<?php echo esc_attr($key); ?>" <?php selected($settings['cf_model'], $key); ?>>
+                                        <?php echo esc_html($model['name'] . ' - ' . $model['description']); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                            <p class="description">
+                                <?php echo esc_html__('Flux 1 Schnell is recommended for best cost/quality balance.', 'vs3-auto-og'); ?>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+
                 <?php submit_button(__('Save Network Settings', 'vs3-auto-og'), 'primary', 'vs3_auto_og_network_submit'); ?>
             </form>
             
@@ -640,10 +721,51 @@ class VS3_Auto_OG_Settings {
     }
     
     /**
+     * Check if network-level Cloudflare credentials are configured
+     *
+     * @return bool True if network credentials are set
+     */
+    private function has_network_cloudflare_credentials() {
+        if (!is_multisite()) {
+            return false;
+        }
+
+        $network_settings = get_site_option('vs3_auto_og_network_settings', array());
+        return !empty($network_settings['cf_account_id']) && !empty($network_settings['cf_api_token']);
+    }
+
+    /**
      * Render Cloudflare AI enabled field
      */
     public function render_cf_enabled_field() {
         $settings = get_option('vs3_auto_og_site_settings', array());
+        $network_settings = is_multisite() ? get_site_option('vs3_auto_og_network_settings', array()) : array();
+
+        // Check if network has credentials configured
+        if ($this->has_network_cloudflare_credentials()) {
+            $cf_enabled = !empty($network_settings['cf_enabled']);
+            ?>
+            <div class="notice notice-info inline" style="margin: 0; padding: 10px 12px;">
+                <p style="margin: 0;">
+                    <strong><?php echo esc_html__('Managed by Network Admin', 'vs3-auto-og'); ?></strong><br>
+                    <?php if ($cf_enabled): ?>
+                        <span style="color: green;">&#10004;</span>
+                        <?php echo esc_html__('Cloudflare AI is enabled network-wide.', 'vs3-auto-og'); ?>
+                    <?php else: ?>
+                        <span style="color: gray;">&#9679;</span>
+                        <?php echo esc_html__('Cloudflare AI is disabled network-wide.', 'vs3-auto-og'); ?>
+                    <?php endif; ?>
+                </p>
+                <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">
+                    <?php echo esc_html__('Contact your network administrator to change this setting.', 'vs3-auto-og'); ?>
+                </p>
+            </div>
+            <!-- Hidden field to preserve the value -->
+            <input type="hidden" name="vs3_auto_og_site_settings[cf_enabled]" value="<?php echo $cf_enabled ? '1' : '0'; ?>" />
+            <?php
+            return;
+        }
+
         $cf_enabled = isset($settings['cf_enabled']) ? $settings['cf_enabled'] : false;
         ?>
         <label>
@@ -660,6 +782,38 @@ class VS3_Auto_OG_Settings {
      * Render Cloudflare API credentials fields
      */
     public function render_cf_credentials_field() {
+        // Check if network credentials are configured
+        if ($this->has_network_cloudflare_credentials()) {
+            $network_settings = get_site_option('vs3_auto_og_network_settings', array());
+            $masked_account_id = substr($network_settings['cf_account_id'], 0, 8) . '...' . substr($network_settings['cf_account_id'], -4);
+            ?>
+            <div class="notice notice-info inline" style="margin: 0; padding: 10px 12px;">
+                <p style="margin: 0;">
+                    <strong><?php echo esc_html__('Using Network Credentials', 'vs3-auto-og'); ?></strong><br>
+                    <?php echo esc_html__('Cloudflare API credentials are configured at the network level.', 'vs3-auto-og'); ?>
+                </p>
+                <p style="margin: 8px 0 0 0;">
+                    <strong><?php echo esc_html__('Account ID:', 'vs3-auto-og'); ?></strong>
+                    <code><?php echo esc_html($masked_account_id); ?></code><br>
+                    <strong><?php echo esc_html__('API Token:', 'vs3-auto-og'); ?></strong>
+                    <code>********</code>
+                </p>
+                <p style="margin: 8px 0 0 0; font-size: 12px; color: #666;">
+                    <?php
+                    printf(
+                        /* translators: %s: link to network settings */
+                        esc_html__('These credentials are managed in %s.', 'vs3-auto-og'),
+                        '<a href="' . network_admin_url('settings.php?page=vs3-auto-og-network') . '">' .
+                        esc_html__('Network Settings', 'vs3-auto-og') .
+                        '</a>'
+                    );
+                    ?>
+                </p>
+            </div>
+            <?php
+            return;
+        }
+
         $settings = get_option('vs3_auto_og_site_settings', array());
         $account_id = isset($settings['cf_account_id']) ? $settings['cf_account_id'] : '';
         $api_token = isset($settings['cf_api_token']) ? $settings['cf_api_token'] : '';
@@ -667,33 +821,33 @@ class VS3_Auto_OG_Settings {
         <p>
             <label>
                 <?php echo esc_html__('Account ID:', 'vs3-auto-og'); ?><br />
-                <input type="text" name="vs3_auto_og_site_settings[cf_account_id]" 
-                       value="<?php echo esc_attr($account_id); ?>" 
-                       class="regular-text" 
+                <input type="text" name="vs3_auto_og_site_settings[cf_account_id]"
+                       value="<?php echo esc_attr($account_id); ?>"
+                       class="regular-text"
                        placeholder="<?php echo esc_attr__('Your Cloudflare Account ID', 'vs3-auto-og'); ?>" />
             </label>
         </p>
         <p>
             <label>
                 <?php echo esc_html__('API Token:', 'vs3-auto-og'); ?><br />
-                <input type="password" name="vs3_auto_og_site_settings[cf_api_token]" 
-                       value="<?php echo esc_attr($api_token); ?>" 
-                       class="regular-text" 
+                <input type="password" name="vs3_auto_og_site_settings[cf_api_token]"
+                       value="<?php echo esc_attr($api_token); ?>"
+                       class="regular-text"
                        placeholder="<?php echo esc_attr__('Your Cloudflare API Token', 'vs3-auto-og'); ?>" />
             </label>
         </p>
         <p class="description">
-            <?php 
+            <?php
             printf(
                 /* translators: %s: link to Cloudflare dashboard */
                 esc_html__('Find your Account ID in the %s. Create an API token with "Workers AI" read permission.', 'vs3-auto-og'),
-                '<a href="https://dash.cloudflare.com/?to=/:account/ai/workers-ai" target="_blank">' . 
-                esc_html__('Cloudflare AI Dashboard', 'vs3-auto-og') . 
+                '<a href="https://dash.cloudflare.com/?to=/:account/ai/workers-ai" target="_blank">' .
+                esc_html__('Cloudflare AI Dashboard', 'vs3-auto-og') .
                 '</a>'
             );
             ?>
         </p>
-        
+
         <!-- Test Connection Button -->
         <p style="margin-top: 15px;">
             <button type="button" class="button" id="vs3-test-cf-connection">
@@ -701,20 +855,20 @@ class VS3_Auto_OG_Settings {
             </button>
             <span id="vs3-cf-test-result" style="margin-left: 10px;"></span>
         </p>
-        
+
         <script>
         jQuery(document).ready(function($) {
             $('#vs3-test-cf-connection').on('click', function() {
                 var $button = $(this);
                 var $result = $('#vs3-cf-test-result');
-                
+
                 $button.prop('disabled', true).text('<?php echo esc_js(__('Testing...', 'vs3-auto-og')); ?>');
                 $result.html('');
-                
+
                 // Get current form values
                 var accountId = $('input[name="vs3_auto_og_site_settings[cf_account_id]"]').val();
                 var apiToken = $('input[name="vs3_auto_og_site_settings[cf_api_token]"]').val();
-                
+
                 $.ajax({
                     url: ajaxurl,
                     type: 'POST',
@@ -748,6 +902,26 @@ class VS3_Auto_OG_Settings {
      * Render Cloudflare AI model field
      */
     public function render_cf_model_field() {
+        // Check if network credentials are configured
+        if ($this->has_network_cloudflare_credentials()) {
+            $network_settings = get_site_option('vs3_auto_og_network_settings', array());
+            $current_model = isset($network_settings['cf_model']) ? $network_settings['cf_model'] : 'flux-1-schnell';
+            $models = VS3_Auto_OG_Cloudflare_AI::get_available_models();
+            $model_name = isset($models[$current_model]) ? $models[$current_model]['name'] : $current_model;
+            ?>
+            <div class="notice notice-info inline" style="margin: 0; padding: 10px 12px;">
+                <p style="margin: 0;">
+                    <strong><?php echo esc_html__('Network Setting:', 'vs3-auto-og'); ?></strong>
+                    <?php echo esc_html($model_name); ?>
+                </p>
+                <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">
+                    <?php echo esc_html__('The AI model is configured at the network level.', 'vs3-auto-og'); ?>
+                </p>
+            </div>
+            <?php
+            return;
+        }
+
         $settings = get_option('vs3_auto_og_site_settings', array());
         $current_model = isset($settings['cf_model']) ? $settings['cf_model'] : 'flux-1-schnell';
         $models = VS3_Auto_OG_Cloudflare_AI::get_available_models();
