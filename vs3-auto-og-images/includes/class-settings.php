@@ -275,7 +275,7 @@ class VS3_Auto_OG_Settings {
      * Render network settings page
      */
     public function render_network_settings_page() {
-        $settings = get_site_option('vs3_auto_og_network_settings', array(
+        $defaults = array(
             'enabled' => true,
             'default_bg_color' => '#ffffff',
             'default_text_color' => '#000000',
@@ -284,7 +284,8 @@ class VS3_Auto_OG_Settings {
             'cf_account_id' => '',
             'cf_api_token' => '',
             'cf_model' => 'flux-1-schnell',
-        ));
+        );
+        $settings = wp_parse_args(get_site_option('vs3_auto_og_network_settings', array()), $defaults);
 
         $models = VS3_Auto_OG_Cloudflare_AI::get_available_models();
         
