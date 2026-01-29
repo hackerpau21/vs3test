@@ -378,42 +378,6 @@ class VS3_Auto_OG_Cloudflare_AI {
     }
     
     /**
-     * Get style description for prompt
-     */
-    private function get_style_description($style) {
-        $styles = array(
-            'abstract' => 'Modern abstract art with flowing organic shapes, bold color blocks, and dynamic composition. Avoid gradients - use solid colors and shapes instead.',
-            'geometric' => 'Clean geometric design with sharp lines, triangles, circles, squares, and polygons. Use flat colors, no gradients. Structured, architectural feel.',
-            'gradient' => 'Smooth color gradients with soft transitions between colors. Dreamy, atmospheric feel with flowing color blends.',
-            'nature' => 'Abstract nature-inspired design with organic shapes reminiscent of leaves, water, clouds, or landscapes. Earthy and natural color palette.',
-            'tech' => 'Futuristic tech aesthetic with circuit patterns, digital grid lines, hexagons, and neon accents. Cyberpunk-inspired, high-tech feel.',
-            'minimal' => 'Extremely minimalist design with simple shapes, lots of white space, subtle lines, and restrained color palette. Clean and uncluttered.',
-            'vibrant' => 'Bold, energetic design with bright saturated colors, dynamic patterns, and high contrast. Eye-catching and lively composition.',
-            'professional' => 'Corporate professional style with subtle patterns, muted colors, clean lines, and sophisticated composition. Business-appropriate aesthetic.',
-            'x-marks' => 'Pure white background with small, thin X marks sparsely scattered in a grid. Each X is 20-30px with 2-3px thin strokes. Colors: red, cyan, green, yellow, gray, pink. Wide spacing (100-120px apart). Delicate, lightweight marks like typographic symbols. NO thick lines, NO bold shapes, NO gradients.',
-        );
-        
-        return isset($styles[$style]) ? $styles[$style] : $styles['abstract'];
-    }
-    
-    /**
-     * Get available styles
-     */
-    public static function get_available_styles() {
-        return array(
-            'abstract' => 'Abstract',
-            'geometric' => 'Geometric',
-            'gradient' => 'Gradient',
-            'nature' => 'Nature-inspired',
-            'tech' => 'Tech/Futuristic',
-            'minimal' => 'Minimal',
-            'vibrant' => 'Vibrant/Bold',
-            'professional' => 'Professional/Corporate',
-            'x-marks' => 'X Marks Pattern',
-        );
-    }
-    
-    /**
      * Test API connection
      * 
      * @return array Result with 'success' and 'message' keys

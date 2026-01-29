@@ -159,22 +159,6 @@ class VS3_Auto_OG_Settings {
             'vs3_auto_og_cloudflare'
         );
         
-        add_settings_field(
-            'vs3_auto_og_cf_style',
-            __('Image Style', 'vs3-auto-og'),
-            array($this, 'render_cf_style_field'),
-            'vs3_auto_og_settings',
-            'vs3_auto_og_cloudflare'
-        );
-        
-        add_settings_field(
-            'vs3_auto_og_cf_prompt',
-            __('Custom Prompt', 'vs3-auto-og'),
-            array($this, 'render_cf_prompt_field'),
-            'vs3_auto_og_settings',
-            'vs3_auto_og_cloudflare'
-        );
-        
         add_settings_section(
             'vs3_auto_og_tools',
             __('Tools', 'vs3-auto-og'),
@@ -247,17 +231,6 @@ class VS3_Auto_OG_Settings {
             $sanitized['cf_model'] = in_array($input['cf_model'], $valid_models) 
                 ? $input['cf_model'] 
                 : 'flux-1-schnell';
-        }
-        
-        if (isset($input['cf_style'])) {
-            $valid_styles = array_keys(VS3_Auto_OG_Cloudflare_AI::get_available_styles());
-            $sanitized['cf_style'] = in_array($input['cf_style'], $valid_styles) 
-                ? $input['cf_style'] 
-                : 'abstract';
-        }
-        
-        if (isset($input['cf_prompt_template'])) {
-            $sanitized['cf_prompt_template'] = sanitize_textarea_field($input['cf_prompt_template']);
         }
         
         // Bump cache version when settings change
@@ -941,95 +914,6 @@ class VS3_Auto_OG_Settings {
     }
     
     /**
-     * Render Cloudflare AI style field
-     */
-    public function render_cf_style_field() {
-        $settings = get_option('vs3_auto_og_site_settings', array());
-        $current_style = isset($settings['cf_style']) ? $settings['cf_style'] : 'abstract';
-        $styles = VS3_Auto_OG_Cloudflare_AI::get_available_styles();
-        ?>
-        <select name="vs3_auto_og_site_settings[cf_style]">
-            <?php foreach ($styles as $key => $label): ?>
-                <option value="<?php echo esc_attr($key); ?>" <?php selected($current_style, $key); ?>>
-                    <?php echo esc_html($label); ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
-        <p class="description">
-            <?php echo esc_html__('Choose the visual style for AI-generated backgrounds.', 'vs3-auto-og'); ?>
-        </p>
-        <?php
-    }
-    
-    /**
-     * Render Cloudflare AI prompt field
-     */
-    public function render_cf_prompt_field() {
-        $settings = get_option('vs3_auto_og_site_settings', array());
-        $cf_ai = new VS3_Auto_OG_Cloudflare_AI();
-        $default_prompt = $cf_ai->get_default_prompt_template();
-        $current_prompt = isset($settings['cf_prompt_template']) ? $settings['cf_prompt_template'] : '';
-        $current_style = isset($settings['cf_style']) ? $settings['cf_style'] : 'abstract';
-        
-        // Get example prompts for different styles
-        $example_prompts = array(
-            'geometric' => 'Create a geometric background with sharp triangles, circles, and hexagons. Use flat solid colors - no gradients. Left side lighter, right side vibrant.',
-            'minimal' => 'Minimalist design with lots of white space, subtle lines, and one or two accent colors. Clean and uncluttered.',
-            'tech' => 'Futuristic tech background with circuit patterns, digital grid lines, and neon accents. Cyberpunk aesthetic.',
-            'vibrant' => 'Bold, energetic background with bright saturated colors and dynamic patterns. High contrast and eye-catching.',
-        );
-        ?>
-        <textarea name="vs3_auto_og_site_settings[cf_prompt_template]" 
-                  rows="5" 
-                  class="large-text" 
-                  placeholder="<?php echo esc_attr($default_prompt); ?>"><?php echo esc_textarea($current_prompt); ?></textarea>
-        <p class="description">
-            <?php echo esc_html__('Optional: Customize the AI prompt. Available placeholders: {title}, {excerpt}, {site_name}, {style}', 'vs3-auto-og'); ?>
-        </p>
-        <p class="description">
-            <?php echo esc_html__('Leave empty to use the default prompt. The {style} placeholder will be replaced with your selected style description.', 'vs3-auto-og'); ?>
-        </p>
-        <div class="notice notice-info inline" style="margin: 10px 0 0 0; padding: 8px 12px;">
-            <p style="margin: 0;">
-                <strong><?php echo esc_html__('Tips for better results:', 'vs3-auto-og'); ?></strong>
-            </p>
-            <ul style="margin: 5px 0 0 20px;">
-                <li><?php echo esc_html__('To avoid gradients, explicitly say "NO gradients" or "use flat colors" in your prompt.', 'vs3-auto-og'); ?></li>
-                <li><?php echo esc_html__('For patterns/textures, be specific: "geometric X marks", "sharp lines", "distinct shapes".', 'vs3-auto-og'); ?></li>
-                <li><?php echo esc_html__('If Flux-1-schnell keeps creating gradients, try switching to Flux-2-klein model (better at following instructions).', 'vs3-auto-og'); ?></li>
-                <li><?php echo esc_html__('Cloudflare filters may flag words like "cocktail" or "party" - these are automatically sanitized.', 'vs3-auto-og'); ?></li>
-            </ul>
-        </div>
-        
-        <?php 
-        // Show current model and suggest alternative if Flux-1-schnell
-        $current_model = isset($settings['cf_model']) ? $settings['cf_model'] : 'flux-1-schnell';
-        if ($current_model === 'flux-1-schnell'): ?>
-        <div class="notice notice-warning inline" style="margin: 10px 0 0 0; padding: 8px 12px;">
-            <p style="margin: 0;">
-                <strong><?php echo esc_html__('Note:', 'vs3-auto-og'); ?></strong>
-                <?php echo esc_html__('Flux-1-schnell sometimes defaults to gradients. If you need precise control over the design, consider switching to Flux-2-klein in the AI Model setting above.', 'vs3-auto-og'); ?>
-            </p>
-        </div>
-        <?php endif; ?>
-        
-        <?php if (isset($example_prompts[$current_style])): ?>
-        <details style="margin-top: 10px;">
-            <summary style="cursor: pointer; color: #0073aa; font-weight: 500;">
-                <?php echo esc_html__('Example prompt for', 'vs3-auto-og'); ?> <?php echo esc_html(ucfirst($current_style)); ?> <?php echo esc_html__('style', 'vs3-auto-og'); ?>
-            </summary>
-            <div style="background: #f9f9f9; border: 1px solid #ddd; padding: 10px; margin-top: 5px; border-radius: 3px;">
-                <code style="font-size: 12px; line-height: 1.6;"><?php echo esc_html($example_prompts[$current_style]); ?></code>
-                <button type="button" class="button button-small" style="margin-top: 8px;" onclick="document.querySelector('textarea[name=\'vs3_auto_og_site_settings[cf_prompt_template]\']').value = '<?php echo esc_js($example_prompts[$current_style]); ?>'">
-                    <?php echo esc_html__('Use this prompt', 'vs3-auto-og'); ?>
-                </button>
-            </div>
-        </details>
-        <?php endif; ?>
-        <?php
-    }
-    
-    /**
      * Enqueue admin scripts
      */
     public function enqueue_admin_scripts($hook) {
@@ -1098,10 +982,8 @@ class VS3_Auto_OG_Settings {
         
         <?php if ($is_ready): ?>
         <p style="color: #666; font-size: 12px;">
-            <?php echo esc_html__('Model:', 'vs3-auto-og'); ?> 
-            <?php echo esc_html(isset($settings['cf_model']) ? $settings['cf_model'] : 'flux-1-schnell'); ?> | 
-            <?php echo esc_html__('Style:', 'vs3-auto-og'); ?> 
-            <?php echo esc_html(isset($settings['cf_style']) ? $settings['cf_style'] : 'abstract'); ?>
+            <?php echo esc_html__('Model:', 'vs3-auto-og'); ?>
+            <?php echo esc_html(isset($settings['cf_model']) ? $settings['cf_model'] : 'flux-1-schnell'); ?>
         </p>
         <?php endif; ?>
         
