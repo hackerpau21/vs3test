@@ -326,23 +326,23 @@ class VS3_Auto_OG_Cloudflare_AI {
      * @return string The X-marks prompt
      */
     private function get_xmarks_prompt() {
-        return 'Create a clean background image with a pure white background. ' .
-               'Place SMALL X marks arranged in a sparse, evenly-spaced grid pattern across the entire image. ' .
-               'Each X mark should be made of two thin intersecting lines forming a small X shape. ' .
-               'IMPORTANT SIZE: Each X mark should be SMALL - approximately 20-30 pixels in size with THIN 2-3 pixel stroke width. ' .
-               'IMPORTANT SPACING: X marks should be spaced FAR APART - approximately 100-120 pixels between each X mark. ' .
-               'The grid should have slight row offset creating a staggered pattern. ' .
-               'Use these specific flat colors randomly: red (#e74c3c), cyan (#00bcd4), green (#2ecc71), yellow (#f1c40f), gray (#95a5a6), pink (#e91e63). ' .
-               'IMPORTANT: Each X mark should be a DIFFERENT color - randomly assign colors so adjacent X marks are different colors. ' .
-               'CRITICAL REQUIREMENTS: ' .
-               '1. Background MUST be pure white - no colors, no gradients. ' .
-               '2. X marks must be SMALL and THIN - like delicate typographic marks, not bold shapes. ' .
-               '3. ALL X marks must be the SAME SIZE - uniform sizing throughout. ' .
-               '4. Use ONLY flat solid colors - absolutely NO gradients, NO shadows, NO glow effects. ' .
-               '5. Each X must have sharp, crisp, clean edges with thin stroke weight. ' .
-               '6. SPARSE distribution - lots of white space between X marks. ' .
-               '7. Think of small, delicate plus signs rotated 45 degrees scattered lightly on white paper. ' .
-               'FORBIDDEN: thick lines, bold marks, large X shapes, gradients, shadows, blur, dense patterns, varying sizes.';
+        return 'Create a minimalist pattern background. Pure white background color. ' .
+               'Draw simple X marks made of two thin crossed lines (not filled shapes, just line strokes). ' .
+               'LAYOUT: Arrange X marks in a regular grid pattern with 7-8 columns and 6-7 rows. ' .
+               'Alternate rows should be offset horizontally to create a staggered brick-like pattern. ' .
+               'SIZE: Every X mark must be EXACTLY the same size - approximately 25-30 pixels, with 3-4 pixel line thickness. ' .
+               'COLORS: Randomly assign each X one of these colors: red, cyan, bright green, yellow, gray, pink. ' .
+               'Each X should be a single solid color. Mix colors randomly so no two adjacent X marks share the same color. ' .
+               'STYLE: Clean, flat, minimal design like a modern blog or tech website background pattern. ' .
+               'Similar to confetti or scattered typography marks on white paper. ' .
+               'CRITICAL: ' .
+               '1. Pure white background only. ' .
+               '2. X marks are LINE STROKES only - two thin lines crossing, not solid filled shapes. ' .
+               '3. ALL X marks IDENTICAL in size - no variation whatsoever. ' .
+               '4. Flat solid colors only - no gradients, shadows, or 3D effects. ' .
+               '5. Even spacing throughout the grid pattern. ' .
+               '6. Colorful variety - use all the colors randomly distributed. ' .
+               'FORBIDDEN: filled shapes, varying sizes, thick bold marks, gradients, shadows, 3D effects, uneven spacing.';
     }
     
     /**
